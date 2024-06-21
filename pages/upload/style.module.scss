@@ -1,0 +1,153 @@
+.pdfContainer {
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    flex-direction: column;
+}
+
+.heading {
+    font-family: 'Plus Jakarta Sans';
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: 0em;
+    text-align: left;
+    margin-bottom: 12px;
+}
+
+.subHeading {
+    font-family: 'Plus Jakarta Sans';
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 28px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #718096;
+}
+
+.docUpload {
+    font-family: Plus Jakarta Sans;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: #6d6d6d;
+    margin-top: 12px;
+}
+
+.documentContainer {
+    border: 1px solid #bdbdbd;
+    padding: 36px 50px;
+    margin-top: 24px;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    text-align: -webkit-center;
+}
+
+.uploadingDocContainer {
+    border: 1px dashed #258ec8;
+    padding: 40px 22px;
+    margin-bottom: 32px;
+
+    .uploadingDoc {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+
+        .fileName {
+            font-family: 'Plus Jakarta Sans';
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 24px;
+            color: #0e0e0e;
+            max-width: 250px;
+            text-wrap: wrap;
+        }
+
+        .fileSize {
+            font-family: 'Plus Jakarta Sans';
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 21px;
+            text-align: left;
+            color: #6d6d6d;
+        }
+    }
+}
+
+.button {
+    background-color: #1a6f9d;
+    padding: 20px 0px;
+    border-radius: 45px;
+    color: white;
+    font-family: 'Plus Jakarta Sans';
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 16px;
+    width: 100%;
+}
+
+.fileUpload {
+    color: #3a8fc8;
+    cursor: pointer;
+}
+
+.docUploadImage {
+    margin-bottom: 12px;
+    width: 40px;
+    height: 40px;
+}
+
+.headingContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.closeImage {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.uploadImage {
+    margin-bottom: 12px;
+}
+
+.buttonContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+}
+
+.skip {
+    font-family: 'Plus Jakarta Sans';
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: underline;
+    line-height: 21px;
+    color: #3a8fc8;
+}
+
+@media (max-width: 768px) {
+    .heading {
+        line-height: 16px;
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+
+    .subHeading {
+        font-size: 12px;
+    }
+
+    .docUpload {
+        font-size: 12px;
+    }
+
+    .uploadImage {
+        width: 30px;
+        height: 30px;
+        margin-bottom: 12px;
+    }
+}

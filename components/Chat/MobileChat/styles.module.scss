@@ -1,0 +1,336 @@
+.displayNone {
+    display: none;
+}
+
+.leftContainerWrapper {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.containerColor {
+    background-color: #b7b7b9;
+}
+
+.leftContainer {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    padding: 39px 20px;
+    background-color: #fff;
+    z-index: 10;
+    height: 100vh;
+}
+
+.container {
+    display: flex;
+    column-gap: 20px;
+    height: 85vh;
+    border-top: 1px solid #e9edf7;
+    margin-left: -20px;
+    margin-right: -20px;
+}
+
+.dropdownLabelStyle {
+    font-size: 24px;
+    font-weight: 500;
+    color: #a39d9d;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.dropdownLabelStyle > p {
+    font-family: 'Plus Jakarta Sans';
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 30px;
+    color: #1b2559;
+}
+
+.dropdownStyle {
+    border-radius: 5px;
+    padding: 32px 20px;
+    width: 310px;
+    overflow-y: scroll;
+}
+
+/* Hide the scrollbar */
+.dropdownStyle::-webkit-scrollbar {
+    display: none;
+}
+
+.dropdownSelectStyle {
+    display: none;
+}
+
+.previousPdfUploadList {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    display: block;
+}
+
+.previousCategoryList {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    display: block;
+    overflow-y: auto;
+    max-height: 35vh;
+}
+
+/* Hide the scrollbar */
+.previousCategoryList::-webkit-scrollbar {
+    display: none;
+}
+
+.emptyStateMessage {
+    margin-top: 42px;
+    width: 100%;
+}
+
+.card {
+    // border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-family: 'Plus Jakarta Sans';
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 30px;
+    color: #718096;
+}
+
+.selectedCard {
+    background-color: #f2fbfb;
+    border-radius: 8px;
+}
+
+.card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.mainContainer {
+    padding: 26px 20px 8px;
+    height: 100vh;
+}
+
+.rightContainerHeading {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.submitButton {
+    background-color: #1a6f9d;
+    padding: 16px;
+    border-radius: 50%;
+    margin-bottom: 6px;
+    height: 48px;
+    width: 48px;
+}
+
+.dots {
+    margin-top: -5px;
+}
+
+.uploadButton {
+    border: 1px solid #258ec8;
+    padding: 10px;
+    border-radius: 50%;
+}
+
+.headerImage {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.apiMessage,
+.userMessage,
+.userMessageWaiting {
+    display: flex;
+}
+
+.userMessage,
+.userMessageWaiting {
+    flex-direction: row-reverse;
+    gap: 12px;
+    align-items: center;
+}
+
+.apiMessage {
+    color: #718096;
+    font-family: 'Plus Jakarta Sans';
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 18px;
+    margin-top: auto;
+    max-width: 715px;
+    text-align: center;
+}
+
+.firstMessage {
+    color: #718096;
+    font-family: 'Plus Jakarta Sans';
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 18px;
+    position: absolute;
+    top: 45%;
+    left: 30%;
+    transform: translate(-22%, -50%);
+    max-width: 715px;
+    text-align: center;
+}
+
+.userText {
+    background: linear-gradient(15.46deg, #258ec8 26.3%, #2dabf0 91.13%);
+    border-radius: 15px;
+    padding: 16px;
+    font-family: 'Plus Jakarta Sans';
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 16px;
+    text-align: left;
+    color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    width: 64vw;
+}
+
+.messageList {
+    display: grid;
+    width: 100%;
+    max-width: 1000px;
+    margin: auto;
+    max-height: 68vh;
+    overflow-y: auto;
+    border-radius: 0.5rem;
+    color: gray;
+    padding: 20px 0px;
+    row-gap: 26px;
+
+    @media (max-width: 320px) {
+        max-height: 59vh;
+    }
+
+    @media (min-width: 700px) {
+        max-height: 85vh;
+    }
+}
+
+.messageList::-webkit-scrollbar {
+    display: none;
+}
+
+.markDownAnswer {
+    width: 100%;
+    font-family: 'Plus Jakarta Sans';
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 24px;
+    text-align: left;
+    color: #1b2559;
+    box-shadow: 14px 27px 45px 4px #7090b033;
+    padding: 16px;
+}
+
+.botIcon,
+.userIcon {
+    margin-right: 12px;
+    border-radius: 0.1rem;
+    height: 100%;
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.markDownAnswer h1,
+.markDownAnswer h2,
+.markDownAnswer h3 {
+    font-size: inherit;
+}
+
+.regenrate {
+    font-family: 'Plus Jakarta Sans';
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 12px;
+    display: flex;
+    padding: 12px 18px;
+    border: 1px solid #e2e8f0;
+    border-radius: 45px;
+    display: flex;
+    gap: 10px;
+    position: absolute;
+    bottom: 120px;
+    left: 30%;
+
+    @media (max-width: 300px) {
+        left: 15% !important;
+    }
+
+    @media (min-width: 301px) and (max-width: 320px) {
+        left: 20% !important;
+    }
+
+    @media (max-width: 400px) {
+        left: 25%;
+    }
+
+    @media (min-width: 700px) {
+        left: 45%;
+    }
+}
+
+.bottomContainer {
+    position: absolute;
+    bottom: 8px;
+    width: 92%;
+
+    .textContainer {
+        display: flex;
+        gap: 6px;
+        justify-content: center;
+
+        .textarea {
+            border: 1px solid #e2e8f0;
+            border-radius: 45px;
+            padding: 16px 20px;
+            width: 75vw;
+            outline: none;
+            font-family: 'Plus Jakarta Sans';
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 14px;
+            text-align: left;
+            color: #718096;
+
+            @media (max-width: 300px) {
+                width: 65vw;
+            }
+
+            &:hover {
+                border-color: #258ec8;
+                font-family: Plus Jakarta Sans;
+                font-weight: 600;
+                color: #1b2559;
+            }
+        }
+    }
+
+    .copyright {
+        font-family: 'Plus Jakarta Sans';
+        font-size: 10px;
+        font-weight: 500;
+        line-height: 24px;
+        text-align: center;
+        color: #718096;
+        margin-top: 16px;
+    }
+}

@@ -1,0 +1,472 @@
+.mainContainer {
+    width: 100%;
+    padding: 24px 30px 0px;
+    display: flex;
+    gap: 30px;
+}
+
+.container {
+    display: flex;
+    column-gap: 20px;
+    height: 85vh;
+    border-top: 1px solid #e9edf7;
+}
+
+.logo {
+    width: 93px;
+    height: 24px;
+    margin-top: 32px;
+    /* object-fit: cover; */
+}
+
+.uploadButton {
+    border: 1px solid #258ec8;
+    padding: 22px;
+    border-radius: 45px;
+    cursor: pointer;
+    color: #258ec8;
+    font-family: 'Plus Jakarta Sans';
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1rem;
+    letter-spacing: 0em;
+    display: flex;
+    gap: 8px;
+}
+
+.divider {
+    margin-top: 10px;
+    border: 1px solid rgb(187, 81, 81);
+}
+
+.dropdownLabelStyle {
+    font-size: 24px;
+    font-weight: 500;
+    color: #a39d9d;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.dropdownLabelStyle>p {
+    font-family: 'Plus Jakarta Sans';
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 30px;
+    color: #1b2559;
+}
+
+.dropdownStyle {
+    border-radius: 5px;
+    padding: 32px 20px;
+    width: 310px;
+    overflow-y: scroll;
+}
+
+/* Hide the scrollbar */
+.dropdownStyle::-webkit-scrollbar {
+    display: none;
+}
+
+.dropdownSelectStyle {
+    display: none;
+}
+
+.previousPdfUploadList {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    display: block;
+}
+
+.previousCategoryList {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    display: block;
+    overflow-y: auto;
+    max-height: 35vh;
+}
+
+/* Hide the scrollbar */
+.previousCategoryList::-webkit-scrollbar {
+    display: none;
+}
+
+.emptyStateMessage {
+    margin-top: 42px;
+    width: 100%;
+}
+
+.card {
+    // border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-family: 'Plus Jakarta Sans';
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 30px;
+    color: #718096;
+}
+
+.selectedCard {
+    background-color: #f2fbfb;
+    border-radius: 8px;
+}
+
+.card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.cloudForm {
+    position: relative;
+}
+
+.textarea {
+    position: relative;
+    resize: none;
+    font-size: 0.9rem;
+    padding: 1rem 2rem;
+    border-radius: 3rem;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #1b2559;
+    outline: none;
+    font-family: 'Plus Jakarta Sans';
+    font-weight: 500;
+    width: 720px;
+}
+
+.textarea:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #eee;
+    border: 1px solid #d9d9e3;
+}
+
+.textarea:focus {
+    outline: none;
+    border-color: #258ec8;
+    font-weight: 600;
+}
+
+.textarea::placeholder {
+    color: #6b7280;
+}
+
+.loadingWheel {
+    position: absolute;
+    top: 0.2rem;
+    right: 0.25rem;
+}
+
+.sendIcon {
+    transform: rotate(90deg);
+    width: 1.2em;
+    height: 1.2em;
+    fill: currentColor;
+}
+
+.messageList {
+    display: grid;
+    width: 100%;
+    max-width: 1000px;
+    margin: auto;
+    max-height: 61.5vh;
+    overflow-y: auto;
+    border-radius: 0.5rem;
+    color: gray;
+    padding: 20px 0px;
+    row-gap: 26px;
+
+    @media (min-height:750px) and (max-height:900px) {
+        max-height: 55.5vh;
+    }
+
+    @media (min-height:1050px) {
+        max-height: 70.5vh;
+    }
+
+    @media (min-height:1400px) {
+        max-height: 82.5vh;
+    }
+
+    @media (min-width:1290px) and (max-width:1399px) {
+        max-height: 59.5vh;
+    }
+
+    @media (min-width:2000px) {
+        max-height: 70.5vh;
+    }
+}
+
+.chatHeaderContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.copyright {
+    font-family: 'Plus Jakarta Sans';
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: #718096;
+}
+
+.goBack {
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans';
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0em;
+    color: #1b2559;
+    align-self: center;
+}
+
+.bottomContainer {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translate(-30%, 0%);
+}
+
+.textContainer {
+    display: flex;
+    gap: 10px;
+}
+
+.generateButton {
+    align-self: flex-start;
+    margin-top: 16px;
+}
+
+/* Hide the scrollbar */
+.messageList::-webkit-scrollbar {
+    display: none;
+}
+
+.shimmerUi {
+    width: 100% !important;
+    border-radius: 8px;
+    height: 38px !important;
+}
+
+@keyframes loading-gradient {
+    0% {
+        background-position: -100% 0;
+    }
+
+    100% {
+        background-position: 100% 0;
+    }
+}
+
+.apiMessage {
+    color: #718096;
+    font-family: 'Plus Jakarta Sans';
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 18px;
+    margin-top: auto;
+    max-width: 715px;
+    text-align: center;
+}
+
+.firstMessage {
+    color: #718096;
+    font-family: 'Plus Jakarta Sans';
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 18px;
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-25%, -50%);
+    max-width: 715px;
+    text-align: center;
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.apiMessage,
+.userMessage,
+.userMessageWaiting {
+    display: flex;
+}
+
+.userMessage,
+.userMessageWaiting {
+    flex-direction: row-reverse;
+    gap: 16px;
+    align-items: center;
+}
+
+.markDownAnswer {
+    width: 100%;
+    font-family: 'Plus Jakarta Sans';
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 24px;
+    text-align: left;
+    color: #1b2559;
+    box-shadow: 14px 27px 45px 4px #7090b033;
+    padding: 22px;
+    width: 920px;
+
+    @media (min-width: 1290px) and (max-width:1399px) {
+        width: 800px;
+    }
+}
+
+.regenrate {
+    font-family: 'Plus Jakarta Sans';
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 16px;
+    display: flex;
+    padding: 18px 24px;
+    border: 1px solid #e2e8f0;
+    border-radius: 45px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    position: absolute;
+    bottom: 180px;
+    left: 50%;
+}
+
+.markDownAnswer a:hover {
+    opacity: 0.8;
+}
+
+.markDownAnswer a {
+    color: #b13a3a;
+    font-weight: 500;
+}
+
+.markDownAnswer code {
+    color: #15cb19;
+    font-weight: 500;
+    white-space: pre-wrap !important;
+}
+
+.markDownAnswer ol,
+.markDownAnswer ul {
+    margin: 1rem;
+}
+
+.botIcon,
+.userIcon {
+    margin-right: 1rem;
+    border-radius: 0.1rem;
+    height: 100%;
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.markDownAnswer h1,
+.markDownAnswer h2,
+.markDownAnswer h3 {
+    font-size: inherit;
+}
+
+.center {
+    display: flex;
+    padding: 1rem 0 3.5rem;
+    width: 100%;
+    justify-content: center;
+}
+
+.chatContainer {
+    width: 100%;
+}
+
+.chatScreenContainer {
+    /* max-height: 75vh; */
+    margin-top: 20px;
+}
+
+.leftContainer {
+    box-shadow: 0px 17px 40px 4px #7090b01c;
+}
+
+.chatScreen {
+    background: #ffffff;
+    border-radius: 0.5rem;
+    overflow: scroll;
+}
+
+.chatScreen::-webkit-scrollbar {
+    display: none;
+    /* hide the scrollbar */
+}
+
+.pointsnormal {
+    width: 90%;
+    height: 90%;
+}
+
+.pointsdim {
+    width: 90%;
+    height: 90%;
+    opacity: 0.25;
+}
+
+.formStyle {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+.submitButton {
+    background-color: #1a6f9d;
+    color: white;
+    box-shadow: 0px 8px 32px #1a6f9d33;
+    display: flex;
+    gap: 8px;
+    font-family: 'Plus Jakarta Sans';
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 16px;
+    text-align: center;
+    padding: 20px 52px;
+    border-radius: 45px;
+    height: 56px;
+}
+
+.userText {
+    background: linear-gradient(15.46deg, #258ec8 26.3%, #2dabf0 91.13%);
+    border-radius: 15px;
+    padding: 22px;
+    font-family: 'Plus Jakarta Sans';
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 16px;
+    text-align: left;
+    color: #ffffff;
+    width: 928px;
+    display: flex;
+    justify-content: space-between;
+
+    @media (min-width: 1290px) and (max-width:1399px) {
+        width: 800px;
+    }
+}
