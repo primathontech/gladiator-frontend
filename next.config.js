@@ -7,16 +7,6 @@ const nextConfig = {
         config.experiments = { ...config.experiments, topLevelAwait: true };
         return config;
     },
-    async redirects() {
-        return [
-            // Basic redirect
-            {
-                source: '/',
-                destination: '/chat',
-                permanent: false,
-            },
-        ];
-    },
 };
 
 export default nextConfig;
