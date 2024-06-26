@@ -1,0 +1,243 @@
+.container {
+    padding: 32px 42px 98px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    // background: linear-gradient(90deg, #e8cbc0 0%, #636fa4 100%);
+    // background-clip: text;
+    // -webkit-background-clip: text;
+    // -webkit-text-fill-color: transparent;
+
+    .upperText {
+        margin-top: 200px;
+        margin-bottom: 52px;
+
+        .roleText {
+            // font-family: 'Plus Jakarta Sans';
+            font-size: 54px;
+            font-weight: 700;
+            text-align: center;
+            color: #1b2559;
+            background: linear-gradient(90deg, #1ac4f0 0%, #f2578d 50.71%, #ffca3d 103.57%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .description {
+            font-family: 'Plus Jakarta Sans';
+            font-size: 24px;
+            font-weight: 400;
+            text-align: center;
+            color: #4e505a;
+            max-width: 540px;
+            margin: 0 auto;
+            background: linear-gradient(90deg, #e8cbc0 0%, #636fa4 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    }
+
+    .logo {
+        width: 150px;
+        height: 44px;
+    }
+
+    .heading {
+        font-family: 'Plus Jakarta Sans';
+        font-size: 20px;
+        font-weight: 400;
+        line-height: 20px;
+        text-align: left;
+        color: #62646c;
+        margin-top: 20px;
+    }
+
+    .middleSection {
+        display: flex;
+        align-self: center;
+        flex-wrap: wrap;
+        column-gap: 40px;
+        row-gap: 40px;
+        max-width: 848px;
+        justify-content: center;
+
+        .middleSectionData {
+            border: 1px solid #5379f6;
+            border-radius: 16px;
+            padding: 14px 20px;
+            width: 254px;
+            display: flex;
+            column-gap: 25px;
+            justify-content: center;
+            align-items: center;
+
+            p {
+                font-family: 'Plus Jakarta Sans';
+                font-size: 18px;
+                font-weight: 700;
+                line-height: 18px;
+                text-align: center;
+                color: #5379f6;
+            }
+
+            &:hover {
+                cursor: pointer;
+                background: linear-gradient(262.41deg, #5379f6 9.75%, #7b5aff 82.63%);
+
+                p {
+                    color: #fff;
+                }
+
+                .management {
+                    border: 4px solid #fff;
+                    background-color: #5379f6;
+                }
+
+                .managementImage {
+                    filter: brightness(1) invert(0);
+                }
+            }
+        }
+
+        .selected {
+            background: linear-gradient(262.41deg, #5379f6 9.75%, #7b5aff 82.63%);
+
+            p {
+                color: #fff;
+            }
+
+            .managementImage {
+                filter: brightness(1) invert(0);
+            }
+        }
+    }
+
+    .buttonContainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        // margin-top: 62px;
+    }
+
+    .nextButton {
+        // background-color: #c01c58;
+        background-color: #f2578d;
+        border: none;
+        color: white;
+        padding: 20px 20px;
+        text-decoration: none;
+        font-family: 'Plus Jakarta Sans';
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 16px;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 45px;
+        transition: background-color 0.3s ease;
+        max-width: 300px;
+        width: 100%;
+        margin-left: inherit;
+
+        &:disabled {
+            background-color: #cbd7fc;
+            cursor: not-allowed;
+        }
+
+        &:hover:enabled {
+            background-color: #b52b5e;
+        }
+    }
+}
+.copyRight {
+    font-family: 'Plus Jakarta Sans';
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 24px;
+    text-align: start;
+    color: #828282;
+    margin-top: 270px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        // padding: 220px 16px 8px;
+        padding: 120px 16px 8px;
+
+        .upperText {
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+
+        .header {
+            display: none !important;
+        }
+
+        .middleSection {
+            display: flex;
+            flex-direction: column;
+            align-self: center;
+            column-gap: 0px;
+            row-gap: 16px;
+            max-width: unset;
+            justify-content: center;
+
+            .middleSectionData {
+                border: 1px solid #5379f6;
+                border-radius: 16px;
+                padding: 18px 28px;
+                width: 90vw;
+                display: flex;
+                align-items: center;
+                gap: 20px;
+
+                .management {
+                    position: inherit;
+                    top: 0;
+                    left: 0;
+                    z-index: 0;
+                    border: 0;
+                    padding: 0px;
+                    border-radius: 0;
+                    background-color: unset;
+                }
+
+                p {
+                    font-family: 'Plus Jakarta Sans';
+                    font-size: 18px;
+                    font-weight: 700;
+                    line-height: 18px;
+                    text-align: center;
+                    color: #5379f6;
+                }
+                .managementImage {
+                    width: 24px;
+                    height: 24px;
+                }
+
+                &:hover {
+                    cursor: pointer;
+                    background-color: #5379f6;
+
+                    p {
+                        color: #fff;
+                    }
+
+                    .management {
+                        border: 0;
+                    }
+
+                    .managementImage {
+                        filter: brightness(1) invert(0);
+                    }
+                }
+            }
+        }
+
+        .copyRight {
+            font-size: 10px;
+            text-align: center;
+        }
+    }
+}
