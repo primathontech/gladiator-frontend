@@ -13,6 +13,7 @@
     letter-spacing: 0em;
     text-align: left;
     margin-bottom: 12px;
+    text-align: center;
 }
 
 .subHeading {
@@ -23,6 +24,7 @@
     letter-spacing: 0em;
     text-align: left;
     color: #718096;
+    text-align: center;
 }
 
 .docUpload {
@@ -46,7 +48,7 @@
 }
 
 .uploadingDocContainer {
-    border: 1px dashed #258ec8;
+    border: 1px dashed #f2578d;
     padding: 40px 22px;
     margin-bottom: 32px;
 
@@ -77,7 +79,7 @@
 }
 
 .button {
-    background-color: #1a6f9d;
+    background-color: #3bd176;
     padding: 20px 0px;
     border-radius: 45px;
     color: white;
@@ -89,7 +91,7 @@
 }
 
 .fileUpload {
-    color: #3a8fc8;
+    color: #f2578d;
     cursor: pointer;
 }
 
