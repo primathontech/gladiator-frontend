@@ -20,17 +20,20 @@
 }
 
 .uploadButton {
-    border: 1px solid #15cb19;
-    padding: 22px;
-    border-radius: 45px;
+    border: 2px dashed #0bed10;
+    padding: 28px 70px;
+    // border-radius: 45px;
     cursor: pointer;
-    color: #15cb19;
+    color: #09950c;
     font-family: 'Plus Jakarta Sans';
     font-size: 14px;
     font-weight: 600;
     line-height: 1rem;
     letter-spacing: 0em;
     display: flex;
+    margin-bottom: 10px;
+    justify-content: center;
+    align-items: baseline;
     gap: 8px;
 }
 
@@ -111,11 +114,13 @@
     font-size: 14px;
     font-weight: 500;
     line-height: 30px;
-    color: #718096;
+    color: #ffffff;
+    display: flex;
+    justify-content: space-between;
 }
 
 .selectedCard {
-    background-color: #f2fbfb;
+    background-color: green;
     border-radius: 8px;
 }
 
@@ -132,7 +137,7 @@
     resize: none;
     font-size: 0.9rem;
     padding: 1rem 2rem;
-    border-radius: 3rem;
+    border-radius: 10px 0px 0px 10px;
     border: 1px solid #e2e8f0;
     background: #ffffff;
     color: #1b2559;
@@ -207,7 +212,7 @@
 
 .chatHeaderContainer {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .copyright {
@@ -240,12 +245,12 @@
 
 .textContainer {
     display: flex;
-    gap: 10px;
+    // gap: 10px;
 }
 
 .generateButton {
     align-self: flex-start;
-    margin-top: 16px;
+    margin-top: 15.4px;
 }
 
 /* Hide the scrollbar */
@@ -390,7 +395,7 @@
 .center {
     display: flex;
     padding: 1rem 0 3.5rem;
-    width: 100%;
+    // width: 100%;
     justify-content: center;
 }
 
@@ -450,12 +455,13 @@
     line-height: 16px;
     text-align: center;
     padding: 20px 52px;
-    border-radius: 45px;
+    border-radius: 0px 10px 10px 0px;
     height: 56px;
 }
 
 .userText {
-    background: linear-gradient(15.46deg, #258ec8 26.3%, #2dabf0 91.13%);
+    // background: linear-gradient(15.46deg, #258ec8 26.3%, #2dabf0 91.13%);
+    background: linear-gradient(15.46deg, #009688 26.3%, #da6ee9 91.13%);
     border-radius: 15px;
     padding: 22px;
     font-family: 'Plus Jakarta Sans';

@@ -128,7 +128,7 @@
 .submitButton {
     background-color: #3bd176;
     padding: 16px;
-    border-radius: 50%;
+    // border-radius: 50%;
     margin-bottom: 6px;
     height: 48px;
     width: 48px;
@@ -139,7 +139,7 @@
 }
 
 .uploadButton {
-    border: 1px solid #258ec8;
+    border: 1px solid #3bd176;
     padding: 10px;
     border-radius: 50%;
 }
@@ -189,7 +189,8 @@
 }
 
 .userText {
-    background: linear-gradient(15.46deg, #258ec8 26.3%, #2dabf0 91.13%);
+    // background: linear-gradient(15.46deg, #258ec8 26.3%, #2dabf0 91.13%);
+    background: linear-gradient(15.46deg, #009688 26.3%, #da6ee9 91.13%);
     border-radius: 15px;
     padding: 16px;
     font-family: 'Plus Jakarta Sans';
@@ -295,12 +296,12 @@
 
     .textContainer {
         display: flex;
-        gap: 6px;
+        // gap: 6px;
         justify-content: center;
 
         .textarea {
             border: 1px solid #e2e8f0;
-            border-radius: 45px;
+            // border-radius: 45px;
             padding: 16px 20px;
             width: 75vw;
             outline: none;

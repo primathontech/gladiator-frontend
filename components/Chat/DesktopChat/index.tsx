@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable import/no-extraneous-dependencies */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
 
 import cx from 'classnames';
 import ReactMarkdown from 'react-markdown';
@@ -16,22 +17,20 @@ import DOCUMENT_UPLOAD from '@public/Images/svgs/document-upload.svg';
 import AI_AVATAR from '@public/Images/pngs/AIAvatar.png';
 import NO_RECORD from '@public/Images/pngs/no-record.png';
 import NO_HISTORY from '@public/Images/pngs/nohistory.png';
-
 import REGENERATE from '@public/Images/svgs/regenerate.svg';
 import SUBMIT_ICON from '@public/Images/svgs/submit.svg';
 import USERICON_IMAGE from '@public/Images/pngs/usericon.png';
 import HISTORY from '@public/Images/svgs/timer.svg';
 import LoadingDots from '@components/ui/LoadingDots';
-import ActiveOption from '@public/Images/svgs/active-option.svg';
+// import ActiveOption from '@public/Images/svgs/active-option.svg';
 import Delete from '@public/Images/svgs/delete.svg';
-import InActiveOption from '@public/Images/svgs/inactive-option.svg';
+// import InActiveOption from '@public/Images/svgs/inactive-option.svg';
 
 import { Accordion, AccordionContent, AccordionItem } from '@components/ui/accordion';
 import ShimmerUiContainer from '@components/ShimmerContainer';
 import UploadPDFModal from '@/components/UploadPDFModal';
 import { APP_URL, ApiRoute } from '@/components/appConstant';
 
-import { useRouter } from 'next/router';
 import styles from './styles.module.scss';
 
 const DesktopChat = () => {
@@ -258,13 +257,16 @@ const DesktopChat = () => {
 
                 if (res.status === 200) {
                     const response = await res.json();
+                    // eslint-disable-next-line no-console
+                    console.log('res', response);
+
                     setMessageState((state) => ({
                         ...state,
                         messages: [
                             ...state.messages,
                             {
                                 type: 'apiMessage',
-                                message: response.answer.result,
+                                message: response.answer,
                             },
                         ],
                     }));
@@ -399,18 +401,38 @@ const DesktopChat = () => {
     return (
         <div className={styles.mainContainer}>
             <div className={styles.leftContainer}>
-                <div className='flex justify-between items-center mb-10'>
+                <div className='flex justify-center items-center mb-4'>
                     <h1
                         style={{
                             fontSize: '24px',
                             fontWeight: 'bold',
                             paddingLeft: '20px',
                             color: 'white',
+                            backgroundColor:
+                                'bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent',
                         }}
                     >
                         AI-Gladiator
                     </h1>
+
                     <UploadPDFModal isOpen={isModalOpen} onClose={closeModal} />
+                </div>
+                <div className={styles.chatHeaderContainer}>
+                    {type === '/chatwithpdf' && (
+                        <div>
+                            <button
+                                onClick={openModal}
+                                className={styles.uploadButton}
+                                type='button'
+                            >
+                                <span className='text-[20px] flex justify-center align-center gap-2'>
+                                    +
+                                </span>
+                                {/* <Image src={DOCUMENT_UPLOAD} alt='pdf upload' /> */}
+                                Drop PDF here
+                            </button>
+                        </div>
+                    )}
                 </div>
                 <div className={styles.container}>
                     <div className={styles.dropdownStyle}>
@@ -454,7 +476,7 @@ const DesktopChat = () => {
                                             aria-hidden
                                             onClick={(e) => handleOptionClick(e, index)}
                                         >
-                                            {dropdownVisible && dropdownIndex === index ? (
+                                            {/* {dropdownVisible && dropdownIndex === index ? (
                                                 <div className={styles.activeImage}>
                                                     <Image
                                                         src={ActiveOption}
@@ -470,23 +492,10 @@ const DesktopChat = () => {
                                                         width={5}
                                                     />
                                                 </div>
-                                            )}
+                                            )} */}
                                         </div>
                                         {dropdownVisible && dropdownIndex === index && (
                                             <div className={styles.dropdownMenu}>
-                                                {/* <div
-                                                    onClick={() => handleEdit(index)}
-                                                    className={styles.dropdownItem}
-                                                    aria-hidden
-                                                >
-                                                    <Image
-                                                        src={Edit}
-                                                        alt='edit'
-                                                        width={16}
-                                                        height={16}
-                                                    />
-                                                    <span className={styles.editText}>Edit</span>
-                                                </div> */}
                                                 <div
                                                     onClick={() => {
                                                         handleDelete(data);
@@ -520,10 +529,11 @@ const DesktopChat = () => {
                     </div>
                 </div>
             </div>
+            {/* <div className='max-w-[400px]'>Abdul pdf</div> */}
             <div className={styles.chatContainer}>
                 <ToastContainer />
                 <div className={styles.chatScreenContainer}>
-                    <div className={styles.chatHeaderContainer}>
+                    {/* <div className={styles.chatHeaderContainer}>
                         {type === '/chatwithpdf' && (
                             <div>
                                 <button
@@ -536,7 +546,7 @@ const DesktopChat = () => {
                                 </button>
                             </div>
                         )}
-                    </div>
+                    </div> */}
                     <div className={styles.chatScreen}>
                         <div ref={messageListRef} className={styles.messageList}>
                             {chatMessages.map((message, index) => {
@@ -650,7 +660,7 @@ const DesktopChat = () => {
                                         id='userInput'
                                         name='userInput'
                                         placeholder={
-                                            loading ? 'Waiting for response...' : 'Send a Message'
+                                            loading ? 'Waiting for response...' : 'Ask any question'
                                         }
                                         value={query}
                                         onChange={(e) => setQuery(e.target.value)}

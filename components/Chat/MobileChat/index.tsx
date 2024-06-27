@@ -562,7 +562,7 @@ const MobileChat = () => {
                                         id='userInput'
                                         name='userInput'
                                         placeholder={
-                                            loading ? 'Waiting for response...' : 'Send a Message'
+                                            loading ? 'Waiting for response...' : 'Ask any question'
                                         }
                                         value={query}
                                         onChange={(e) => setQuery(e.target.value)}
