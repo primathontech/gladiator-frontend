@@ -28,6 +28,7 @@ import Delete from '@public/Images/svgs/delete.svg';
 
 import { Accordion, AccordionContent, AccordionItem } from '@components/ui/accordion';
 import ShimmerUiContainer from '@components/ShimmerContainer';
+import DeletePdfModal from '@/components/DeletePdfModal';
 import UploadPDFModal from '@/components/UploadPDFModal';
 import { APP_URL, ApiRoute } from '@/components/appConstant';
 
@@ -66,7 +67,7 @@ const DesktopChat = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [previousUserText, setPreviousUserText] = useState('');
     const [dropdownVisible, setDropdownVisible] = useState(false);
-    const [dropdownIndex, setDropdownIndex] = useState(null);
+    const [dropdownIndex] = useState(null);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     // const [chatHistory, setChatHistory] = useState([]);
 
@@ -348,6 +349,7 @@ const DesktopChat = () => {
     }, [chatMessages]);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDeletePdfModalOpen, setIsDeletePdfModalOpen] = useState<boolean>(false);
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -355,6 +357,14 @@ const DesktopChat = () => {
 
     const closeModal = () => {
         setIsModalOpen(false);
+    };
+
+    const opendeleteModal = () => {
+        setIsDeletePdfModalOpen(true);
+    };
+
+    const closeDeleteModal = () => {
+        setIsDeletePdfModalOpen(false);
     };
 
     const handleClickOutside = () => {
@@ -373,11 +383,11 @@ const DesktopChat = () => {
         };
     }, []);
 
-    const handleOptionClick = (e: any, idx: any) => {
-        e.stopPropagation();
-        setDropdownVisible(!dropdownVisible);
-        setDropdownIndex(idx);
-    };
+    // const handleOptionClick = (e: any, idx: any) => {
+    //     e.stopPropagation();
+    //     setDropdownVisible(!dropdownVisible);
+    //     setDropdownIndex(idx);
+    // };
 
     const handleDelete = async (data: any) => {
         try {
@@ -470,13 +480,18 @@ const DesktopChat = () => {
                                         aria-hidden
                                     >
                                         <p className={styles.cardData}>{data}</p>
-                                        <div
+                                        <div>
+                                            <button onClick={opendeleteModal} type='button'>
+                                                D
+                                            </button>
+                                        </div>
+                                        {/* <div
                                             aria-controls='simple-menu'
                                             aria-haspopup='true'
                                             aria-hidden
                                             onClick={(e) => handleOptionClick(e, index)}
                                         >
-                                            {/* {dropdownVisible && dropdownIndex === index ? (
+                                            {dropdownVisible && dropdownIndex === index ? (
                                                 <div className={styles.activeImage}>
                                                     <Image
                                                         src={ActiveOption}
@@ -492,8 +507,13 @@ const DesktopChat = () => {
                                                         width={5}
                                                     />
                                                 </div>
-                                            )} */}
-                                        </div>
+                                            )}
+                                        </div> */}
+                                        <DeletePdfModal
+                                            isDeletePdfModalOpen={isDeletePdfModalOpen}
+                                            onClose={closeDeleteModal}
+                                            pdfName={selectedPdf}
+                                        />
                                         {dropdownVisible && dropdownIndex === index && (
                                             <div className={styles.dropdownMenu}>
                                                 <div
