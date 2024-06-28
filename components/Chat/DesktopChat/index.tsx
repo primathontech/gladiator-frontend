@@ -62,7 +62,6 @@ const DesktopChat = () => {
     const [selectedPdf, setSelectedPdf] = useState('');
     const [pdfOptions, setPdfOptions] = useState([]);
     const [selectedPdfCard, setSelectedPdfCard] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
     const [previousUserText, setPreviousUserText] = useState('');
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [, setDropdownIndex] = useState(null);
@@ -175,6 +174,41 @@ const DesktopChat = () => {
         handleRegenerateSubmit(e);
     };
 
+    // Common code for fetch functions extracted fetch function
+
+    // eslint-disable-next-line consistent-return
+    async function fetchOptions(
+        url: string,
+        method: string,
+        body?: any,
+        callback?: (response: any) => void,
+    ) {
+        setLoading(true);
+        try {
+            const res = await fetch(url, {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: body ? JSON.stringify(body) : '',
+            });
+
+            if (res.status === 200) {
+                const response = await res.json();
+                if (callback) callback(response);
+
+                return response;
+                // eslint-disable-next-line no-else-return
+            } else {
+                console.error('Failed to fetch data');
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     async function handleSubmit(e: ClickOrPressEvent) {
         e.preventDefault();
 
@@ -215,42 +249,48 @@ const DesktopChat = () => {
             requestBody.category = 'Categories';
         }
 
-        const reqBody = JSON.stringify(requestBody);
+        const response = await fetchOptions(`${APP_URL}${ApiRoute.CHAT_API}`, 'POST', requestBody);
 
-        const fetchOptions = async () => {
-            setIsLoading(true);
-            try {
-                const res = await fetch(`${APP_URL}${ApiRoute.CHAT_API}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
+        if (response) {
+            setMessageState((state) => ({
+                ...state,
+                messages: [
+                    ...state.messages,
+                    {
+                        type: 'apiMessage',
+                        message: response.answer,
                     },
-                    body: reqBody,
-                });
-
-                if (res.status === 200) {
-                    const response = await res.json();
-                    setMessageState((state) => ({
-                        ...state,
-                        messages: [
-                            ...state.messages,
-                            {
-                                type: 'apiMessage',
-                                message: response.answer,
-                            },
-                        ],
-                    }));
-                } else {
-                    // Handle error
-                }
-            } catch (error) {
-                console.error('Error fetching options:', error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchOptions();
+                ],
+            }));
+        }
     }
+
+    useEffect(() => {
+        if (selectedPdf) {
+            fetchOptions(
+                `${APP_URL}${ApiRoute.CHAT_API}`,
+                'POST',
+                {
+                    question: 'Summary',
+                    filename: selectedPdf,
+                },
+                (response) => {
+                    if (response) {
+                        setMessageState((state) => ({
+                            ...state,
+                            messages: [
+                                ...state.messages,
+                                {
+                                    type: 'apiMessage',
+                                    message: response.answer,
+                                },
+                            ],
+                        }));
+                    }
+                },
+            );
+        }
+    }, [selectedPdf]);
 
     // prevent empty submissions
     const handleEnter = useCallback(
@@ -284,7 +324,7 @@ const DesktopChat = () => {
         textAreaRef.current?.focus();
     }, []);
 
-    const fetchOptions = async () => {
+    const fetchOptionsPdfList = async () => {
         setPdfLoading(true);
         try {
             const res = await fetch(`${APP_URL}/api/files`, {
@@ -307,7 +347,7 @@ const DesktopChat = () => {
     };
 
     useEffect(() => {
-        fetchOptions();
+        fetchOptionsPdfList();
     }, []);
 
     // scroll to bottom of chat
@@ -454,7 +494,7 @@ const DesktopChat = () => {
                                             isDeletePdfModalOpen={isDeletePdfModalOpen}
                                             onClose={closeDeleteModal}
                                             pdfName={selectedPdf}
-                                            fetchOptions={fetchOptions}
+                                            fetchOptions={fetchOptionsPdfList}
                                         />
                                     </div>
                                 ))
@@ -470,24 +510,9 @@ const DesktopChat = () => {
                     </div>
                 </div>
             </div>
-            {/* <div className='max-w-[400px]'>Abdul pdf</div> */}
             <div className={styles.chatContainer}>
                 <ToastContainer />
                 <div className={styles.chatScreenContainer}>
-                    {/* <div className={styles.chatHeaderContainer}>
-                        {type === '/chatwithpdf' && (
-                            <div>
-                                <button
-                                    onClick={openModal}
-                                    className={styles.uploadButton}
-                                    type='button'
-                                >
-                                    <Image src={DOCUMENT_UPLOAD} alt='pdf upload' />
-                                    Upload Document
-                                </button>
-                            </div>
-                        )}
-                    </div> */}
                     <div className={styles.chatScreen}>
                         <div ref={messageListRef} className={styles.messageList}>
                             {chatMessages.map((message, index) => {
@@ -613,7 +638,7 @@ const DesktopChat = () => {
                         </div>
                         <button type='submit' disabled={loading} className={styles.generateButton}>
                             <div className={styles.submitButton} onClick={handleSubmit} aria-hidden>
-                                {isLoading ? (
+                                {loading ? (
                                     <LoadingDots color='#FFF' style='large' />
                                 ) : (
                                     <>
