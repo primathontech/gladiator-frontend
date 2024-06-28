@@ -6,7 +6,6 @@ export enum AppRoutes {
     HOME = '/',
     CHAT = '/chat',
     CUSTOM_CHAT = '/chatwithpdf',
-    CUSTOM_CHAT2 = '/chatwithpdf',
 }
 
 export enum ApiRoute {

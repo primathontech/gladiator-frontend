@@ -22,13 +22,12 @@ import SUBMIT_ICON from '@public/Images/svgs/submit.svg';
 import USERICON_IMAGE from '@public/Images/pngs/usericon.png';
 import HISTORY from '@public/Images/svgs/timer.svg';
 import LoadingDots from '@components/ui/LoadingDots';
-// import ActiveOption from '@public/Images/svgs/active-option.svg';
 import Delete from '@public/Images/svgs/delete.svg';
-// import InActiveOption from '@public/Images/svgs/inactive-option.svg';
 
 import { Accordion, AccordionContent, AccordionItem } from '@components/ui/accordion';
 import ShimmerUiContainer from '@components/ShimmerContainer';
 import UploadPDFModal from '@/components/UploadPDFModal';
+import DeletePdfModal from '@/components/DeletePdfModal';
 import { APP_URL, ApiRoute } from '@/components/appConstant';
 
 import styles from './styles.module.scss';
@@ -66,9 +65,7 @@ const DesktopChat = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [previousUserText, setPreviousUserText] = useState('');
     const [dropdownVisible, setDropdownVisible] = useState(false);
-    const [dropdownIndex, setDropdownIndex] = useState(null);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    // const [chatHistory, setChatHistory] = useState([]);
+    const [, setDropdownIndex] = useState(null);
 
     // Add a state to track whether the response has been received from the API
     const [responseReceived, setResponseReceived] = useState(false);
@@ -178,30 +175,6 @@ const DesktopChat = () => {
         handleRegenerateSubmit(e);
     };
 
-    // useEffect(() => {
-    //     const fetchOptions = async () => {
-    //         setIsLoading(true);
-    //         try {
-    //             const res = await fetch(`${APP_URL}/api/chat-history/${selectedCategory}`, {
-    //                 method: 'GET',
-    //             });
-
-    //             if (res.status === 200) {
-    //                 const options = await res.json();
-    //                 setChatHistory(options);
-    //             } else {
-    //                 // Handle error
-    //                 console.error('Failed to fetch chat history: ', res.statusText);
-    //             }
-    //         } catch (error) {
-    //             console.error('Error fetching options:', error);
-    //         } finally {
-    //             setIsLoading(false);
-    //         }
-    //     };
-    //     fetchOptions();
-    // }, [selectedCategory]);
-
     async function handleSubmit(e: ClickOrPressEvent) {
         e.preventDefault();
 
@@ -257,9 +230,6 @@ const DesktopChat = () => {
 
                 if (res.status === 200) {
                     const response = await res.json();
-                    // eslint-disable-next-line no-console
-                    console.log('res', response);
-
                     setMessageState((state) => ({
                         ...state,
                         messages: [
@@ -314,29 +284,29 @@ const DesktopChat = () => {
         textAreaRef.current?.focus();
     }, []);
 
-    useEffect(() => {
-        const fetchOptions = async () => {
-            setPdfLoading(true);
-            try {
-                const res = await fetch(`${APP_URL}/api/files`, {
-                    method: 'GET',
-                });
-                if (res.status === 200) {
-                    const options = await res.json();
-                    // setCategory(options.category);
-                    if (type === '/chatwithpdf') {
-                        setPdfOptions(options.files);
-                    }
-                } else {
-                    // Handle error
-                    console.error('Failed to fetch files');
+    const fetchOptions = async () => {
+        setPdfLoading(true);
+        try {
+            const res = await fetch(`${APP_URL}/api/files`, {
+                method: 'GET',
+            });
+            if (res.status === 200) {
+                const options = await res.json();
+                if (type === '/chatwithpdf') {
+                    setPdfOptions(options.files);
                 }
-            } catch (error) {
-                console.error('Error fetching options:', error);
-            } finally {
-                setPdfLoading(false);
+            } else {
+                // Handle error
+                console.error('Failed to fetch files');
             }
-        };
+        } catch (error) {
+            console.error('Error fetching options:', error);
+        } finally {
+            setPdfLoading(false);
+        }
+    };
+
+    useEffect(() => {
         fetchOptions();
     }, []);
 
@@ -348,6 +318,7 @@ const DesktopChat = () => {
     }, [chatMessages]);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDeletePdfModalOpen, setIsDeletePdfModalOpen] = useState<boolean>(false);
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -355,6 +326,14 @@ const DesktopChat = () => {
 
     const closeModal = () => {
         setIsModalOpen(false);
+    };
+
+    const openDeleteModal = () => {
+        setIsDeletePdfModalOpen(true);
+    };
+
+    const closeDeleteModal = () => {
+        setIsDeletePdfModalOpen(false);
     };
 
     const handleClickOutside = () => {
@@ -377,25 +356,6 @@ const DesktopChat = () => {
         e.stopPropagation();
         setDropdownVisible(!dropdownVisible);
         setDropdownIndex(idx);
-    };
-
-    const handleDelete = async (data: any) => {
-        try {
-            const res = await fetch(`${APP_URL}/api/files/${data}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            if (res.status === 200) {
-                toast.success('Pdf File deleted successfully');
-            } else {
-                toast.error('Failed to delete');
-            }
-        } catch (error) {
-            toast.error('Something went wrong');
-        }
-        setDropdownVisible(false);
     };
 
     return (
@@ -425,10 +385,9 @@ const DesktopChat = () => {
                                 className={styles.uploadButton}
                                 type='button'
                             >
-                                <span className='text-[20px] flex justify-center align-center gap-2'>
+                                <span className='text-[24px] font-extrabold flex justify-center align-center gap-2'>
                                     +
                                 </span>
-                                {/* <Image src={DOCUMENT_UPLOAD} alt='pdf upload' /> */}
                                 Drop PDF here
                             </button>
                         </div>
@@ -470,36 +429,15 @@ const DesktopChat = () => {
                                         aria-hidden
                                     >
                                         <p className={styles.cardData}>{data}</p>
-                                        <div
-                                            aria-controls='simple-menu'
-                                            aria-haspopup='true'
-                                            aria-hidden
-                                            onClick={(e) => handleOptionClick(e, index)}
-                                        >
-                                            {/* {dropdownVisible && dropdownIndex === index ? (
-                                                <div className={styles.activeImage}>
-                                                    <Image
-                                                        src={ActiveOption}
-                                                        alt='option'
-                                                        width={20}
-                                                    />
-                                                </div>
-                                            ) : (
-                                                <div className={styles.inactiveImage}>
-                                                    <Image
-                                                        src={InActiveOption}
-                                                        alt='option'
-                                                        width={5}
-                                                    />
-                                                </div>
-                                            )} */}
-                                        </div>
-                                        {dropdownVisible && dropdownIndex === index && (
-                                            <div className={styles.dropdownMenu}>
+                                        {selectedPdfCard === index && (
+                                            <div
+                                                aria-controls='simple-menu'
+                                                aria-haspopup='true'
+                                                aria-hidden
+                                                onClick={(e) => handleOptionClick(e, index)}
+                                            >
                                                 <div
-                                                    onClick={() => {
-                                                        handleDelete(data);
-                                                    }}
+                                                    onClick={openDeleteModal}
                                                     className={styles.dropdownItem}
                                                     aria-hidden
                                                 >
@@ -509,12 +447,15 @@ const DesktopChat = () => {
                                                         width={16}
                                                         height={16}
                                                     />
-                                                    <span className={styles.deleteText}>
-                                                        Delete
-                                                    </span>
                                                 </div>
                                             </div>
                                         )}
+                                        <DeletePdfModal
+                                            isDeletePdfModalOpen={isDeletePdfModalOpen}
+                                            onClose={closeDeleteModal}
+                                            pdfName={selectedPdf}
+                                            fetchOptions={fetchOptions}
+                                        />
                                     </div>
                                 ))
                             ) : (
