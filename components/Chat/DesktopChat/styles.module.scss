@@ -16,17 +16,15 @@
     width: 93px;
     height: 24px;
     margin-top: 32px;
-    /* object-fit: cover; */
 }
 
 .uploadButton {
     border: 2px dashed #0bed10;
     padding: 28px 70px;
-    // border-radius: 45px;
     cursor: pointer;
     color: #09950c;
     font-family: 'Plus Jakarta Sans';
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 600;
     line-height: 1rem;
     letter-spacing: 0em;
@@ -102,7 +100,7 @@
 }
 
 .card {
-    // border: 1px solid #ddd;
+    // border: 1px solid #dddddd;
     border-radius: 8px;
     padding: 16px;
     margin-top: 10px;
@@ -117,10 +115,18 @@
     color: #ffffff;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+}
+
+.cardData {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 200px; /* Adjust width as needed */
 }
 
 .selectedCard {
-    background-color: green;
+    background-color: rgb(65, 137, 65);
     border-radius: 8px;
 }
 

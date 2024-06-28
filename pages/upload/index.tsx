@@ -45,7 +45,6 @@ const UploadPdf = ({ onClose }: any) => {
             }
         } catch (error) {
             toast.error('Failed to upload PDF. Please try again.');
-            router.push(AppRoutes.CUSTOM_CHAT2);
             setIsSelected(false);
         }
     };
