@@ -82,7 +82,7 @@ const MobileChat = () => {
 
     const handleClickPdf = (index: any, data: any) => {
         setSelectedPdfCard(index);
-        setHamburger(!hamburger);
+        setHamburger(true);
         setSelectedValue('');
         setSelectedPdf(data);
         setMessageState({
