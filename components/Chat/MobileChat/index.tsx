@@ -27,10 +27,10 @@ import ShimmerUiContainer from '@components/ShimmerContainer';
 import UploadPDFModal from '@/components/UploadPDFModal';
 import { APP_URL, ApiRoute } from '@/components/appConstant';
 import DeletePdfModal from '@/components/DeletePdfModal';
+import { renderMessageContent } from '@/utils/helper';
 
 import { useRouter } from 'next/router';
 import styles from './styles.module.scss';
-import { renderMessageContent } from '@/utils/helper';
 
 const MobileChat = () => {
     const [query, setQuery] = useState<string>('');
@@ -66,7 +66,7 @@ const MobileChat = () => {
     const [selectedPdf, setSelectedPdf] = useState('');
     const [pdfOptions, setPdfOptions] = useState([]);
     const [selectedPdfCard, setSelectedPdfCard] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
+    // const [isLoading, setIsLoading] = useState(true);
     const [hamburger, setHamburger] = useState(false);
     const [, setPreviousUserText] = useState('');
     const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -166,7 +166,7 @@ const MobileChat = () => {
 
         const requestBody: any = {
             question,
-            history,
+            // history,
             filename: selectedValue || `${selectedPdf}`,
         };
 
