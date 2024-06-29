@@ -84,7 +84,7 @@ const DesktopChat = () => {
             messages: [
                 {
                     message:
-                        'Join millions of students, researchers and professionals to instantly answer questions and understand research with AI',
+                        'Empower Your Learning with AI: Instantly Summarize, Chat, and Get Answers from Your PDFs',
                     type: 'apiMessage',
                 },
             ],
