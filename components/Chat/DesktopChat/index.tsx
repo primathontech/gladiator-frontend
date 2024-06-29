@@ -14,7 +14,7 @@ import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { Document } from 'langchain/document';
 
 import DOCUMENT_UPLOAD from '@public/Images/svgs/document-upload.svg';
-import AI_AVATAR from '@public/Images/pngs/AIAvatar.png';
+import AI_AVATAR from '@public/Images/pngs/chat.png';
 import NO_RECORD from '@public/Images/pngs/no-record.png';
 import NO_HISTORY from '@public/Images/pngs/nohistory.png';
 import REGENERATE from '@public/Images/svgs/regenerate.svg';
@@ -31,6 +31,7 @@ import DeletePdfModal from '@/components/DeletePdfModal';
 import { APP_URL, ApiRoute } from '@/components/appConstant';
 
 import styles from './styles.module.scss';
+import { renderMessageContent } from '@/utils/helper';
 
 const DesktopChat = () => {
     const [query, setQuery] = useState<string>('');
@@ -568,7 +569,9 @@ const DesktopChat = () => {
                                                         {message.type === 'apiMessage' &&
                                                         index !== 0 ? (
                                                             <Typing speed={20}>
-                                                                {message.message}
+                                                                {renderMessageContent(
+                                                                    message.message,
+                                                                )}
                                                             </Typing>
                                                         ) : (
                                                             message.message
