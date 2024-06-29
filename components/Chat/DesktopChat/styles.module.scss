@@ -29,7 +29,7 @@
     line-height: 1rem;
     letter-spacing: 0em;
     display: flex;
-    margin-bottom: 10px;
+    margin-bottom: 22px;
     justify-content: center;
     align-items: baseline;
     gap: 8px;
@@ -188,7 +188,7 @@
     width: 100%;
     max-width: 1000px;
     margin: auto;
-    max-height: 61.5vh;
+    max-height: 74vh;
     overflow-y: auto;
     border-radius: 0.5rem;
     color: gray;
@@ -208,7 +208,7 @@
     }
 
     @media (min-width: 1290px) and (max-width: 1399px) {
-        max-height: 59.5vh;
+        max-height: 74vh;
     }
 
     @media (min-width: 2000px) {
