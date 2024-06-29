@@ -4,32 +4,34 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import cx from 'classnames';
-import ReactMarkdown from 'react-markdown';
+// import ReactMarkdown from 'react-markdown';
 import Image from 'next/image';
 import Typing from 'react-typing-animation';
 import { toast, ToastContainer } from 'react-toastify';
 
 import { Message, ClickOrPressEvent } from 'types/chat';
-import { fetchEventSource } from '@microsoft/fetch-event-source';
+// import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { Document } from 'langchain/document';
 
 import DOCUMENT_UPLOAD from '@public/Images/svgs/document-upload.svg';
 import AI_AVATAR from '@public/Images/pngs/chat.png';
 import NO_RECORD from '@public/Images/pngs/no-record.png';
 import NO_HISTORY from '@public/Images/pngs/nohistory.png';
-import REGENERATE from '@public/Images/svgs/regenerate.svg';
+// import REGENERATE from '@public/Images/svgs/regenerate.svg';
 import SUBMIT_ICON from '@public/Images/svgs/submit.svg';
 import USERICON_IMAGE from '@public/Images/pngs/usericon.png';
 import HISTORY from '@public/Images/svgs/timer.svg';
 import LoadingDots from '@components/ui/LoadingDots';
 import Delete from '@public/Images/svgs/delete.svg';
 
-import { Accordion, AccordionContent, AccordionItem } from '@components/ui/accordion';
+// import { Accordion, AccordionContent, AccordionItem } from '@components/ui/accordion';
 import ShimmerUiContainer from '@components/ShimmerContainer';
 import UploadPDFModal from '@/components/UploadPDFModal';
 import DeletePdfModal from '@/components/DeletePdfModal';
-import { APP_URL, ApiRoute } from '@/components/appConstant';
-import { renderMessageContent } from '@/utils/helper';
+import { APP_URL, ApiRoute, AppRoutes } from '@/components/appConstant';
+import Link from 'next/link';
+
+
 
 import styles from './styles.module.scss';
 
@@ -63,12 +65,12 @@ const DesktopChat = () => {
     const [selectedPdf, setSelectedPdf] = useState('');
     const [pdfOptions, setPdfOptions] = useState([]);
     const [selectedPdfCard, setSelectedPdfCard] = useState(null);
-    const [previousUserText, setPreviousUserText] = useState('');
+    const [, setPreviousUserText] = useState('');
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [, setDropdownIndex] = useState(null);
 
     // Add a state to track whether the response has been received from the API
-    const [responseReceived, setResponseReceived] = useState(false);
+    // const [responseReceived, setResponseReceived] = useState(false);
     const [pdfLoading, setPdfLoading] = useState(false);
 
     const { messages, pending, history, pendingSourceDocs } = messageState;
@@ -91,88 +93,6 @@ const DesktopChat = () => {
             pendingSourceDocs: [],
             pending: undefined,
         });
-    };
-
-    async function handleRegenerateSubmit(e: ClickOrPressEvent) {
-        e.preventDefault();
-        if (!previousUserText) {
-            toast.error('Please input a question');
-            setLoading(false);
-            setResponseReceived(true);
-
-            return;
-        }
-
-        setPreviousUserText(previousUserText.trim());
-        setResponseReceived(true);
-        const question = previousUserText.trim();
-
-        setMessageState((state) => ({
-            ...state,
-            messages: state.messages.slice(0, -1),
-            pending: undefined,
-        }));
-
-        setLoading(true);
-        setQuery('');
-        setMessageState((state) => ({ ...state, pending: '' }));
-
-        const ctrl = new AbortController();
-
-        try {
-            fetchEventSource(`${APP_URL}/api/chat`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    question,
-                    filename: selectedValue || `${selectedPdf}`,
-                }),
-                signal: ctrl.signal,
-                onmessage: (event) => {
-                    if (event.data === '[DONE]') {
-                        setMessageState((state) => ({
-                            messages: [
-                                ...state.messages,
-                                {
-                                    type: 'apiMessage',
-                                    message: state.pending ?? '',
-                                    sourceDocs: state.pendingSourceDocs,
-                                },
-                            ],
-                            pending: undefined,
-                            pendingSourceDocs: undefined,
-                        }));
-                        setLoading(false);
-                        ctrl.abort();
-                    } else {
-                        const data = JSON.parse(event.data);
-                        if (data.sourceDocs) {
-                            setMessageState((state) => ({
-                                ...state,
-                                pendingSourceDocs: data.sourceDocs,
-                            }));
-                        } else {
-                            setMessageState((state) => ({
-                                ...state,
-                                pending: (state.pending ?? '') + data.data,
-                            }));
-                        }
-                    }
-                },
-            });
-        } catch (error) {
-            setLoading(false);
-            // setError("An error occurred while fetching the data. Please try again.");
-        }
-    }
-
-    const handleRegenerate = (e: any) => {
-        setResponseReceived(false);
-        setLoading(true);
-        setQuery(previousUserText);
-        handleRegenerateSubmit(e);
     };
 
     // Common code for fetch functions extracted fetch function
@@ -216,13 +136,11 @@ const DesktopChat = () => {
         if (!query) {
             toast.error('Please input a question');
             setLoading(false);
-            setResponseReceived(true);
 
             return;
         }
 
         setPreviousUserText(query.trim());
-        setResponseReceived(true);
         const question = query.trim();
 
         setMessageState((state) => ({
@@ -402,7 +320,7 @@ const DesktopChat = () => {
     return (
         <div className={styles.mainContainer}>
             <div className={styles.leftContainer}>
-                <div className='flex justify-center items-center mb-4'>
+                <div className='flex justify-center items-center mb-4 mt-4'>
                     <h1
                         style={{
                             fontSize: '24px',
@@ -413,7 +331,7 @@ const DesktopChat = () => {
                                 'bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent',
                         }}
                     >
-                        AI-Gladiator
+                        <Link href={AppRoutes.HOME}>AI-Gladiator </Link>
                     </h1>
 
                     <UploadPDFModal isOpen={isModalOpen} onClose={closeModal} />
@@ -585,7 +503,7 @@ const DesktopChat = () => {
 
                                 return null;
                             })}
-                            <div className='p-5'>
+                            {/* <div className='p-5'>
                                 {messageState.messages.map((msg, index) => (
                                     <div
                                         key={`SourceDocs-${index}`}
@@ -602,10 +520,10 @@ const DesktopChat = () => {
                                         </Accordion>
                                     </div>
                                 ))}
-                            </div>
+                            </div> */}
                         </div>
                     </div>
-                    {!loading && responseReceived && (
+                    {/* {!loading && responseReceived && (
                         <button
                             type='button'
                             className={styles.regenrate}
@@ -614,7 +532,7 @@ const DesktopChat = () => {
                             <Image src={REGENERATE} alt='Regen' width={14} height={14} />
                             Regenerate Response
                         </button>
-                    )}
+                    )} */}
                 </div>
                 <div className={styles.bottomContainer}>
                     <div className={styles.textContainer}>

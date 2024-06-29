@@ -268,37 +268,37 @@
     font-size: inherit;
 }
 
-.regenrate {
-    font-family: 'Plus Jakarta Sans';
-    font-size: 12px;
-    font-weight: 600;
-    line-height: 12px;
-    display: flex;
-    padding: 12px 18px;
-    border: 1px solid #e2e8f0;
-    border-radius: 45px;
-    display: flex;
-    gap: 10px;
-    position: absolute;
-    bottom: 120px;
-    left: 30%;
+// .regenrate {
+//     font-family: 'Plus Jakarta Sans';
+//     font-size: 12px;
+//     font-weight: 600;
+//     line-height: 12px;
+//     display: flex;
+//     padding: 12px 18px;
+//     border: 1px solid #e2e8f0;
+//     border-radius: 45px;
+//     display: flex;
+//     gap: 10px;
+//     position: absolute;
+//     bottom: 120px;
+//     left: 30%;
 
-    @media (max-width: 300px) {
-        left: 15% !important;
-    }
+//     @media (max-width: 300px) {
+//         left: 15% !important;
+//     }
 
-    @media (min-width: 301px) and (max-width: 320px) {
-        left: 20% !important;
-    }
+//     @media (min-width: 301px) and (max-width: 320px) {
+//         left: 20% !important;
+//     }
 
-    @media (max-width: 400px) {
-        left: 25%;
-    }
+//     @media (max-width: 400px) {
+//         left: 25%;
+//     }
 
-    @media (min-width: 700px) {
-        left: 45%;
-    }
-}
+//     @media (min-width: 700px) {
+//         left: 45%;
+//     }
+// }
 
 .bottomContainer {
     position: absolute;

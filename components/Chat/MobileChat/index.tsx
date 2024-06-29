@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import cx from 'classnames';
-import ReactMarkdown from 'react-markdown';
+// import ReactMarkdown from 'react-markdown';
 import Image from 'next/image';
 import Typing from 'react-typing-animation';
 import { toast, ToastContainer } from 'react-toastify';
@@ -22,7 +22,7 @@ import Delete from '@public/Images/svgs/delete.svg';
 // import InActiveOption from '@public/Images/svgs/inactive-option.svg';
 
 import LoadingDots from '@components/ui/LoadingDots';
-import { Accordion, AccordionContent, AccordionItem } from '@components/ui/accordion';
+// import { Accordion, AccordionContent, AccordionItem } from '@components/ui/accordion';
 import ShimmerUiContainer from '@components/ShimmerContainer';
 import UploadPDFModal from '@/components/UploadPDFModal';
 import { APP_URL, ApiRoute } from '@/components/appConstant';
@@ -30,6 +30,7 @@ import DeletePdfModal from '@/components/DeletePdfModal';
 import { renderMessageContent } from '@/utils/helper';
 
 import { useRouter } from 'next/router';
+
 import styles from './styles.module.scss';
 
 const MobileChat = () => {
@@ -580,7 +581,7 @@ const MobileChat = () => {
 
                                 return null;
                             })}
-                            <div className='p-5'>
+                            {/* <div className='p-5'>
                                 {messageState.messages.map((msg, index) => (
                                     <div
                                         key={`SourceDocs-${index}`}
@@ -597,7 +598,7 @@ const MobileChat = () => {
                                         </Accordion>
                                     </div>
                                 ))}
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>
