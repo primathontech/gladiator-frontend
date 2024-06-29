@@ -2,36 +2,31 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 import cx from 'classnames';
-// import ReactMarkdown from 'react-markdown';
 import Image from 'next/image';
 import Typing from 'react-typing-animation';
 import { toast, ToastContainer } from 'react-toastify';
 
 import { Message, ClickOrPressEvent } from 'types/chat';
-// import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { Document } from 'langchain/document';
 
 import DOCUMENT_UPLOAD from '@public/Images/svgs/document-upload.svg';
 import AI_AVATAR from '@public/Images/pngs/chat.png';
 import NO_RECORD from '@public/Images/pngs/no-record.png';
 import NO_HISTORY from '@public/Images/pngs/nohistory.png';
-// import REGENERATE from '@public/Images/svgs/regenerate.svg';
 import SUBMIT_ICON from '@public/Images/svgs/submit.svg';
 import USERICON_IMAGE from '@public/Images/pngs/usericon.png';
 import HISTORY from '@public/Images/svgs/timer.svg';
 import LoadingDots from '@components/ui/LoadingDots';
 import Delete from '@public/Images/svgs/delete.svg';
 
-// import { Accordion, AccordionContent, AccordionItem } from '@components/ui/accordion';
 import ShimmerUiContainer from '@components/ShimmerContainer';
 import UploadPDFModal from '@/components/UploadPDFModal';
 import DeletePdfModal from '@/components/DeletePdfModal';
 import { APP_URL, ApiRoute, AppRoutes } from '@/components/appConstant';
-import Link from 'next/link';
-
-
+import { renderMessageContent } from '@/utils/helper';
 
 import styles from './styles.module.scss';
 
@@ -70,7 +65,6 @@ const DesktopChat = () => {
     const [, setDropdownIndex] = useState(null);
 
     // Add a state to track whether the response has been received from the API
-    // const [responseReceived, setResponseReceived] = useState(false);
     const [pdfLoading, setPdfLoading] = useState(false);
 
     const { messages, pending, history, pendingSourceDocs } = messageState;
@@ -503,36 +497,8 @@ const DesktopChat = () => {
 
                                 return null;
                             })}
-                            {/* <div className='p-5'>
-                                {messageState.messages.map((msg, index) => (
-                                    <div
-                                        key={`SourceDocs-${index}`}
-                                        className={`message ${msg.type}`}
-                                    >
-                                        <Accordion type='single' collapsible className='flex-col'>
-                                            <AccordionItem value={msg.message}>
-                                                <AccordionContent>
-                                                    <ReactMarkdown linkTarget='_blank'>
-                                                        {msg.message}
-                                                    </ReactMarkdown>
-                                                </AccordionContent>
-                                            </AccordionItem>
-                                        </Accordion>
-                                    </div>
-                                ))}
-                            </div> */}
                         </div>
                     </div>
-                    {/* {!loading && responseReceived && (
-                        <button
-                            type='button'
-                            className={styles.regenrate}
-                            onClick={handleRegenerate}
-                        >
-                            <Image src={REGENERATE} alt='Regen' width={14} height={14} />
-                            Regenerate Response
-                        </button>
-                    )} */}
                 </div>
                 <div className={styles.bottomContainer}>
                     <div className={styles.textContainer}>

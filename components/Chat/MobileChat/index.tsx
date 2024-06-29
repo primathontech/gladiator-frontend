@@ -581,24 +581,6 @@ const MobileChat = () => {
 
                                 return null;
                             })}
-                            {/* <div className='p-5'>
-                                {messageState.messages.map((msg, index) => (
-                                    <div
-                                        key={`SourceDocs-${index}`}
-                                        className={`message ${msg.type}`}
-                                    >
-                                        <Accordion type='single' collapsible className='flex-col'>
-                                            <AccordionItem value={msg.message}>
-                                                <AccordionContent>
-                                                    <ReactMarkdown linkTarget='_blank'>
-                                                        {msg.message}
-                                                    </ReactMarkdown>
-                                                </AccordionContent>
-                                            </AccordionItem>
-                                        </Accordion>
-                                    </div>
-                                ))}
-                            </div> */}
                         </div>
                     </div>
                 </div>
