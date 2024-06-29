@@ -11,24 +11,26 @@ import { Document } from 'langchain/document';
 
 import DOCUMENT_UPLOAD from '@public/Images/svgs/document-upload.svg';
 import MENU from '@public/Images/svgs/menu.svg';
-import AI_AVATAR from '@public/Images/pngs/AIAvatar.png';
+import AI_AVATAR from '@public/Images/pngs/chat.png';
 import NO_RECORD from '@public/Images/pngs/no-record.png';
 import DOCUMENT_UPLOAD1 from '@public/Images/pngs/document-upload1.png';
 import SUBMIT_ICON from '@public/Images/svgs/submit.svg';
 import USERICON_IMAGE from '@public/Images/pngs/usericon.png';
-import ActiveOption from '@public/Images/svgs/active-option.svg';
+// import ActiveOption from '@public/Images/svgs/active-option.svg';
 // import Edit from '@public/Images/svgs/edit.svg';
 import Delete from '@public/Images/svgs/delete.svg';
-import InActiveOption from '@public/Images/svgs/inactive-option.svg';
+// import InActiveOption from '@public/Images/svgs/inactive-option.svg';
 
 import LoadingDots from '@components/ui/LoadingDots';
 import { Accordion, AccordionContent, AccordionItem } from '@components/ui/accordion';
 import ShimmerUiContainer from '@components/ShimmerContainer';
 import UploadPDFModal from '@/components/UploadPDFModal';
 import { APP_URL, ApiRoute } from '@/components/appConstant';
+import DeletePdfModal from '@/components/DeletePdfModal';
 
 import { useRouter } from 'next/router';
 import styles from './styles.module.scss';
+import { renderMessageContent } from '@/utils/helper';
 
 const MobileChat = () => {
     const [query, setQuery] = useState<string>('');
@@ -68,7 +70,8 @@ const MobileChat = () => {
     const [hamburger, setHamburger] = useState(false);
     const [, setPreviousUserText] = useState('');
     const [dropdownVisible, setDropdownVisible] = useState(false);
-    const [dropdownIndex, setDropdownIndex] = useState(null);
+    const [, setDropdownIndex] = useState(null);
+    const [pdfLoading, setPdfLoading] = useState(false);
 
     // Add a state to track whether the response has been received from the API
     const [, setResponseReceived] = useState(false);
@@ -80,13 +83,14 @@ const MobileChat = () => {
 
     const handleClickPdf = (index: any, data: any) => {
         setSelectedPdfCard(index);
-        setHamburger(!hamburger);
+        setHamburger(true);
         setSelectedValue('');
         setSelectedPdf(data);
         setMessageState({
             messages: [
                 {
-                    message: 'Hi, What would you like to learn?',
+                    message:
+                        'Empower Your Learning with AI: Instantly Summarize, Chat, and Get Answers from Your PDFs',
                     type: 'apiMessage',
                 },
             ],
@@ -94,6 +98,41 @@ const MobileChat = () => {
             pending: undefined,
         });
     };
+
+    // Common code for fetch functions extracted fetch function
+
+    // eslint-disable-next-line consistent-return
+    async function fetchOptions(
+        url: string,
+        method: string,
+        body?: any,
+        callback?: (response: any) => void,
+    ) {
+        setLoading(true);
+        try {
+            const res = await fetch(url, {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: body ? JSON.stringify(body) : '',
+            });
+
+            if (res.status === 200) {
+                const response = await res.json();
+                if (callback) callback(response);
+
+                return response;
+                // eslint-disable-next-line no-else-return
+            } else {
+                console.error('Failed to fetch data');
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     async function handleSubmit(e: ClickOrPressEvent) {
         e.preventDefault();
@@ -127,6 +166,7 @@ const MobileChat = () => {
 
         const requestBody: any = {
             question,
+            history,
             filename: selectedValue || `${selectedPdf}`,
         };
 
@@ -134,42 +174,48 @@ const MobileChat = () => {
             requestBody.category = 'Categories';
         }
 
-        const reqBody = JSON.stringify(requestBody);
+        const response = await fetchOptions(`${APP_URL}${ApiRoute.CHAT_API}`, 'POST', requestBody);
 
-        const fetchOptions = async () => {
-            setIsLoading(true);
-            try {
-                const res = await fetch(`${APP_URL}${ApiRoute.CHAT_API}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
+        if (response) {
+            setMessageState((state) => ({
+                ...state,
+                messages: [
+                    ...state.messages,
+                    {
+                        type: 'apiMessage',
+                        message: response.answer,
                     },
-                    body: reqBody,
-                });
-
-                if (res.status === 200) {
-                    const response = await res.json();
-                    setMessageState((state) => ({
-                        ...state,
-                        messages: [
-                            ...state.messages,
-                            {
-                                type: 'apiMessage',
-                                message: response.answer.result,
-                            },
-                        ],
-                    }));
-                } else {
-                    // Handle error
-                }
-            } catch (error) {
-                console.error('Error fetching options:', error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchOptions();
+                ],
+            }));
+        }
     }
+
+    useEffect(() => {
+        if (selectedPdf) {
+            fetchOptions(
+                `${APP_URL}${ApiRoute.CHAT_API}`,
+                'POST',
+                {
+                    question: 'Summary',
+                    filename: selectedPdf,
+                },
+                (response) => {
+                    if (response) {
+                        setMessageState((state) => ({
+                            ...state,
+                            messages: [
+                                ...state.messages,
+                                {
+                                    type: 'apiMessage',
+                                    message: response.answer,
+                                },
+                            ],
+                        }));
+                    }
+                },
+            );
+        }
+    }, [selectedPdf]);
 
     // prevent empty submissions
     const handleEnter = useCallback(
@@ -203,30 +249,56 @@ const MobileChat = () => {
         textAreaRef.current?.focus();
     }, []);
 
-    useEffect(() => {
-        const fetchOptions = async () => {
-            setIsLoading(true);
-            try {
-                const res = await fetch(`${APP_URL}/api/files`, {
-                    method: 'GET',
-                });
-                if (res.status === 200) {
-                    const options = await res.json();
-                    // setOptions(options.category);
-                    if (type === '/chatwithpdf') {
-                        setPdfOptions(options.files);
-                    }
-                } else {
-                    // Handle error
+    const fetchOptionsPdfList = async () => {
+        setPdfLoading(true);
+        try {
+            const res = await fetch(`${APP_URL}/api/files`, {
+                method: 'GET',
+            });
+            if (res.status === 200) {
+                const options = await res.json();
+                if (type === '/chatwithpdf') {
+                    setPdfOptions(options.files);
                 }
-            } catch (error) {
-                console.error('Error fetching options:', error);
-            } finally {
-                setIsLoading(false);
+            } else {
+                // Handle error
+                console.error('Failed to fetch files');
             }
-        };
-        fetchOptions();
+        } catch (error) {
+            console.error('Error fetching options:', error);
+        } finally {
+            setPdfLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchOptionsPdfList();
     }, []);
+
+    // useEffect(() => {
+    //     const fetchOptions = async () => {
+    //         setIsLoading(true);
+    //         try {
+    //             const res = await fetch(`${APP_URL}/api/files`, {
+    //                 method: 'GET',
+    //             });
+    //             if (res.status === 200) {
+    //                 const options = await res.json();
+    //                 // setOptions(options.category);
+    //                 if (type === '/chatwithpdf') {
+    //                     setPdfOptions(options.files);
+    //                 }
+    //             } else {
+    //                 // Handle error
+    //             }
+    //         } catch (error) {
+    //             console.error('Error fetching options:', error);
+    //         } finally {
+    //             setIsLoading(false);
+    //         }
+    //     };
+    //     fetchOptions();
+    // }, []);
 
     // scroll to bottom of chat
     useEffect(() => {
@@ -236,6 +308,7 @@ const MobileChat = () => {
     }, [chatMessages]);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDeletePdfModalOpen, setIsDeletePdfModalOpen] = useState<boolean>(false);
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -243,6 +316,14 @@ const MobileChat = () => {
 
     const closeModal = () => {
         setIsModalOpen(false);
+    };
+
+    const openDeleteModal = () => {
+        setIsDeletePdfModalOpen(true);
+    };
+
+    const closeDeleteModal = () => {
+        setIsDeletePdfModalOpen(false);
     };
 
     const handleClickOutside = () => {
@@ -267,24 +348,24 @@ const MobileChat = () => {
         setDropdownIndex(idx);
     };
 
-    const handleDelete = async (data: any) => {
-        try {
-            const res = await fetch(`${APP_URL}/api/files/${data}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            if (res.status === 200) {
-                toast.success('File deleted successfully');
-            } else {
-                toast.error('Failed to delete');
-            }
-        } catch (error) {
-            toast.error('Something went wrong');
-        }
-        setDropdownVisible(false);
-    };
+    // const handleDelete = async (data: any) => {
+    //     try {
+    //         const res = await fetch(`${APP_URL}/api/files/${data}`, {
+    //             method: 'DELETE',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //         });
+    //         if (res.status === 200) {
+    //             toast.success('File deleted successfully');
+    //         } else {
+    //             toast.error('Failed to delete');
+    //         }
+    //     } catch (error) {
+    //         toast.error('Something went wrong');
+    //     }
+    //     setDropdownVisible(false);
+    // };
 
     return (
         <div
@@ -330,7 +411,7 @@ const MobileChat = () => {
                                     <p>Uploaded Pdf List</p>
                                 </div>
                                 <div className={styles.previousPdfUploadList}>
-                                    {isLoading ? (
+                                    {pdfLoading ? (
                                         <div className={styles.emptyStateMessage}>
                                             <ShimmerUiContainer
                                                 className={styles.shimmerUi}
@@ -351,49 +432,15 @@ const MobileChat = () => {
                                                 aria-hidden
                                             >
                                                 <p className={styles.cardData}>{data}</p>
-                                                <div
-                                                    aria-controls='simple-menu'
-                                                    aria-haspopup='true'
-                                                    aria-hidden
-                                                    onClick={(e) => handleOptionClick(e, index)}
-                                                >
-                                                    {dropdownVisible && dropdownIndex === index ? (
-                                                        <div className={styles.activeImage}>
-                                                            <Image
-                                                                src={ActiveOption}
-                                                                alt='option'
-                                                                width={20}
-                                                            />
-                                                        </div>
-                                                    ) : (
-                                                        <div className={styles.inactiveImage}>
-                                                            <Image
-                                                                src={InActiveOption}
-                                                                alt='option'
-                                                                width={5}
-                                                            />
-                                                        </div>
-                                                    )}
-                                                </div>
-                                                {dropdownVisible && dropdownIndex === index && (
-                                                    <div className={styles.dropdownMenu}>
-                                                        {/* <div
-                                                    onClick={() => handleEdit(index)}
-                                                    className={styles.dropdownItem}
-                                                    aria-hidden
-                                                >
-                                                    <Image
-                                                        src={Edit}
-                                                        alt='edit'
-                                                        width={16}
-                                                        height={16}
-                                                    />
-                                                    <span className={styles.editText}>Edit</span>
-                                                </div> */}
+                                                {selectedPdfCard === index && (
+                                                    <div
+                                                        aria-controls='simple-menu'
+                                                        aria-haspopup='true'
+                                                        aria-hidden
+                                                        onClick={(e) => handleOptionClick(e, index)}
+                                                    >
                                                         <div
-                                                            onClick={() => {
-                                                                handleDelete(data);
-                                                            }}
+                                                            onClick={openDeleteModal}
                                                             className={styles.dropdownItem}
                                                             aria-hidden
                                                         >
@@ -403,12 +450,15 @@ const MobileChat = () => {
                                                                 width={16}
                                                                 height={16}
                                                             />
-                                                            <span className={styles.deleteText}>
-                                                                Delete
-                                                            </span>
                                                         </div>
                                                     </div>
                                                 )}
+                                                <DeletePdfModal
+                                                    isDeletePdfModalOpen={isDeletePdfModalOpen}
+                                                    onClose={closeDeleteModal}
+                                                    pdfName={selectedPdf}
+                                                    fetchOptions={fetchOptionsPdfList}
+                                                />
                                             </div>
                                         ))
                                     ) : (
@@ -514,7 +564,9 @@ const MobileChat = () => {
                                                         {message.type === 'apiMessage' &&
                                                         index !== 0 ? (
                                                             <Typing speed={20}>
-                                                                {message.message}
+                                                                {renderMessageContent(
+                                                                    message.message,
+                                                                )}
                                                             </Typing>
                                                         ) : (
                                                             message.message
@@ -578,7 +630,7 @@ const MobileChat = () => {
                             className={styles.generateButton}
                         >
                             <div className={styles.submitButton} onClick={handleSubmit} aria-hidden>
-                                {isLoading ? (
+                                {loading ? (
                                     <div className={styles.dots}>
                                         <LoadingDots color='#FFF' style='small' />
                                     </div>

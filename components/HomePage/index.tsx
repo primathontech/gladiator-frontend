@@ -24,8 +24,8 @@ const HomePage = () => {
                 <div className={styles.upperText}>
                     <div className={styles.roleText}>Chat with any PDF</div>
                     <div className={styles.description}>
-                        Join millions of students, researchers and professionals to instantly answer
-                        questions and understand research with AI
+                        Empower Your Learning with AI: Instantly Summarize, Chat, and Get Answers
+                        from Your PDFs
                     </div>
                 </div>
 

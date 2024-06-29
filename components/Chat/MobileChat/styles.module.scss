@@ -105,9 +105,19 @@
     color: #718096;
 }
 
+.cardData {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 200px; /* Adjust width as needed */
+}
+
 .selectedCard {
     background-color: #f2fbfb;
     border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .card:hover {
@@ -196,7 +206,7 @@
     font-family: 'Plus Jakarta Sans';
     font-size: 16px;
     font-weight: 600;
-    line-height: 16px;
+    line-height: 22px;
     text-align: left;
     color: #ffffff;
     display: flex;
