@@ -29,9 +29,9 @@ import ShimmerUiContainer from '@components/ShimmerContainer';
 import UploadPDFModal from '@/components/UploadPDFModal';
 import DeletePdfModal from '@/components/DeletePdfModal';
 import { APP_URL, ApiRoute } from '@/components/appConstant';
+import { renderMessageContent } from '@/utils/helper';
 
 import styles from './styles.module.scss';
-import { renderMessageContent } from '@/utils/helper';
 
 const DesktopChat = () => {
     const [query, setQuery] = useState<string>('');
