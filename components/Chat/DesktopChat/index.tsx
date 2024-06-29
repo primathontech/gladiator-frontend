@@ -29,9 +29,9 @@ import ShimmerUiContainer from '@components/ShimmerContainer';
 import UploadPDFModal from '@/components/UploadPDFModal';
 import DeletePdfModal from '@/components/DeletePdfModal';
 import { APP_URL, ApiRoute, AppRoutes } from '@/components/appConstant';
-
-import { renderMessageContent } from '@/utils/helper';
 import Link from 'next/link';
+
+
 
 import styles from './styles.module.scss';
 
