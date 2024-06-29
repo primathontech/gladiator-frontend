@@ -2,6 +2,6 @@
 
 import HomePage from '@/components/HomePage';
 
-const PdfgptHome = () => <HomePage />;
+const ChatWithPdfHome = () => <HomePage />;
 
-export default PdfgptHome;
+export default ChatWithPdfHome;

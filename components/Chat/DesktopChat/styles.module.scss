@@ -16,21 +16,22 @@
     width: 93px;
     height: 24px;
     margin-top: 32px;
-    /* object-fit: cover; */
 }
 
 .uploadButton {
-    border: 1px solid #258ec8;
-    padding: 22px;
-    border-radius: 45px;
+    border: 2px dashed #0bed10;
+    padding: 28px 70px;
     cursor: pointer;
-    color: #258ec8;
+    color: #09950c;
     font-family: 'Plus Jakarta Sans';
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 600;
     line-height: 1rem;
     letter-spacing: 0em;
     display: flex;
+    margin-bottom: 10px;
+    justify-content: center;
+    align-items: baseline;
     gap: 8px;
 }
 
@@ -42,18 +43,18 @@
 .dropdownLabelStyle {
     font-size: 24px;
     font-weight: 500;
-    color: #a39d9d;
+    color: white;
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.dropdownLabelStyle>p {
+.dropdownLabelStyle > p {
     font-family: 'Plus Jakarta Sans';
     font-size: 16px;
     font-weight: 700;
     line-height: 30px;
-    color: #1b2559;
+    color: white;
 }
 
 .dropdownStyle {
@@ -61,6 +62,7 @@
     padding: 32px 20px;
     width: 310px;
     overflow-y: scroll;
+    background-color: rgb(0, 21, 41);
 }
 
 /* Hide the scrollbar */
@@ -98,7 +100,7 @@
 }
 
 .card {
-    // border: 1px solid #ddd;
+    // border: 1px solid #dddddd;
     border-radius: 8px;
     padding: 16px;
     margin-top: 10px;
@@ -110,11 +112,21 @@
     font-size: 14px;
     font-weight: 500;
     line-height: 30px;
-    color: #718096;
+    color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cardData {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 200px; /* Adjust width as needed */
 }
 
 .selectedCard {
-    background-color: #f2fbfb;
+    background-color: rgb(65, 137, 65);
     border-radius: 8px;
 }
 
@@ -131,7 +143,7 @@
     resize: none;
     font-size: 0.9rem;
     padding: 1rem 2rem;
-    border-radius: 3rem;
+    border-radius: 10px 0px 0px 10px;
     border: 1px solid #e2e8f0;
     background: #ffffff;
     color: #1b2559;
@@ -183,30 +195,30 @@
     padding: 20px 0px;
     row-gap: 26px;
 
-    @media (min-height:750px) and (max-height:900px) {
+    @media (min-height: 750px) and (max-height: 900px) {
         max-height: 55.5vh;
     }
 
-    @media (min-height:1050px) {
+    @media (min-height: 1050px) {
         max-height: 70.5vh;
     }
 
-    @media (min-height:1400px) {
+    @media (min-height: 1400px) {
         max-height: 82.5vh;
     }
 
-    @media (min-width:1290px) and (max-width:1399px) {
+    @media (min-width: 1290px) and (max-width: 1399px) {
         max-height: 59.5vh;
     }
 
-    @media (min-width:2000px) {
+    @media (min-width: 2000px) {
         max-height: 70.5vh;
     }
 }
 
 .chatHeaderContainer {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .copyright {
@@ -239,12 +251,12 @@
 
 .textContainer {
     display: flex;
-    gap: 10px;
+    // gap: 10px;
 }
 
 .generateButton {
     align-self: flex-start;
-    margin-top: 16px;
+    margin-top: 15.4px;
 }
 
 /* Hide the scrollbar */
@@ -327,8 +339,10 @@
     box-shadow: 14px 27px 45px 4px #7090b033;
     padding: 22px;
     width: 920px;
+    background: linear-gradient(15.46deg, #009688 26.3%, #da6ee9 91.13%);
+    border-radius: 10px;
 
-    @media (min-width: 1290px) and (max-width:1399px) {
+    @media (min-width: 1290px) and (max-width: 1399px) {
         width: 800px;
     }
 }
@@ -389,7 +403,7 @@
 .center {
     display: flex;
     padding: 1rem 0 3.5rem;
-    width: 100%;
+    // width: 100%;
     justify-content: center;
 }
 
@@ -404,6 +418,7 @@
 
 .leftContainer {
     box-shadow: 0px 17px 40px 4px #7090b01c;
+    background-color: rgb(0, 21, 41);
 }
 
 .chatScreen {
@@ -437,9 +452,9 @@
 }
 
 .submitButton {
-    background-color: #1a6f9d;
+    background-color: #3bd176;
     color: white;
-    box-shadow: 0px 8px 32px #1a6f9d33;
+    box-shadow: 0px 8px 32px #3bd176;
     display: flex;
     gap: 8px;
     font-family: 'Plus Jakarta Sans';
@@ -448,12 +463,13 @@
     line-height: 16px;
     text-align: center;
     padding: 20px 52px;
-    border-radius: 45px;
+    border-radius: 0px 10px 10px 0px;
     height: 56px;
 }
 
 .userText {
-    background: linear-gradient(15.46deg, #258ec8 26.3%, #2dabf0 91.13%);
+    // background: linear-gradient(15.46deg, #258ec8 26.3%, #2dabf0 91.13%);
+    background: linear-gradient(15.46deg, #009688 26.3%, #da6ee9 91.13%);
     border-radius: 15px;
     padding: 22px;
     font-family: 'Plus Jakarta Sans';
@@ -466,7 +482,7 @@
     display: flex;
     justify-content: space-between;
 
-    @media (min-width: 1290px) and (max-width:1399px) {
+    @media (min-width: 1290px) and (max-width: 1399px) {
         width: 800px;
     }
 }

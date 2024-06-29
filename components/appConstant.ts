@@ -5,7 +5,7 @@ export const UPLOAD_API_URL = `${APP_URL}/api/upload`;
 export enum AppRoutes {
     HOME = '/',
     CHAT = '/chat',
-    CUSTOM_CHAT="/customchat"
+    CUSTOM_CHAT = '/chatwithpdf',
 }
 
 export enum ApiRoute {

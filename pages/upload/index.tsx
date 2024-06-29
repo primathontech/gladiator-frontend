@@ -1,28 +1,27 @@
 /* eslint-disable no-restricted-properties */
 import React, { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LinearProgress from '@mui/material/LinearProgress';
-import { useRouter } from 'next/router';
 
 import UPLOAD_DOC from '@public/Images/pngs/document-upload1.png';
 import CLOSE from '@public/Images/svgs/close.svg';
-
 import { AppRoutes, UPLOAD_API_URL } from '@/components/appConstant';
-import LoadingDots from '@/components/ui/LoadingDots';
 
-import Link from 'next/link';
 import styles from './style.module.scss';
 
-const ChatgptpdfUpload = ({ onClose }: any) => {
+const UploadPdf = ({ onClose }: any) => {
     const [selectedFile, setSelectedFile] = useState<any>(null);
     const [isSelected, setIsSelected] = useState(false);
     const router = useRouter();
 
     const handleSubmit = async (selectedFile: any) => {
         const formData = new FormData();
-        formData.append('pdf', selectedFile);
+        formData.append('file', selectedFile);
 
         try {
             const response = await fetch(UPLOAD_API_URL, {
@@ -35,7 +34,7 @@ const ChatgptpdfUpload = ({ onClose }: any) => {
             const data = await response.json();
             // Check if status code is 200 OK before refreshing
             if (response.status === 200) {
-                toast.success('Success! PDF has been uploaded ');
+                toast.success('PDF has been uploaded successfully! ');
                 if (router.asPath === '/') {
                     router.push(AppRoutes.CUSTOM_CHAT);
                 } else {
@@ -85,7 +84,7 @@ const ChatgptpdfUpload = ({ onClose }: any) => {
         >
             <div className={styles.headingContainer}>
                 <div>
-                    <h1 className={styles.heading}>Upload New Document</h1>
+                    <h1 className={styles.heading}>Drop your PDF here</h1>
                     <h2 className={styles.subHeading}>Ready to Chat with Your PDF? Upload Here!</h2>
                 </div>
                 <Image src={CLOSE} alt='close' className={styles.closeImage} onClick={onClose} />
@@ -97,22 +96,23 @@ const ChatgptpdfUpload = ({ onClose }: any) => {
                             src={UPLOAD_DOC}
                             alt='upload document'
                             className={styles.docUploadImage}
-
                         />
                         <div>
                             <p className={styles.fileName}>{selectedFile.name}</p>
                             <p className={styles.fileSize}>{formatBytes(selectedFile.size)}</p>
                         </div>
                     </div>
-                    <LinearProgress style={{ height: '6px', borderRadius: '45px' }} />
+                    <LinearProgress
+                        style={{ height: '6px', borderRadius: '45px' }}
+                        color='success'
+                    />
                 </div>
             ) : (
                 <div className={styles.documentContainer}>
-                    <Image src={UPLOAD_DOC} alt='upload document' className={styles.uploadImage} />
+                    {/* <Image src={UPLOAD_DOC} alt='upload document' className={styles.uploadImage} /> */}
                     <span className={styles.docUpload}>
-                        Upload your file here or&nbsp;
                         <label htmlFor='fileInput' className={styles.fileUpload}>
-                            select file
+                            select to upload PDF file
                             <input
                                 id='fileInput'
                                 type='file'
@@ -125,14 +125,15 @@ const ChatgptpdfUpload = ({ onClose }: any) => {
                 </div>
             )}
             <div className={styles.buttonContainer}>
-                <button type='button' className={styles.button}>
-                    {isSelected ? <LoadingDots color='#FFF' style='large' /> : 'Upload'}
-                </button>
-                {router.asPath === "/" && <Link href="/customchat" className={styles.skip}>Skip upload</Link>}
+                {router.asPath === '/' && (
+                    <Link href='/chatwithpdf' className={styles.skip}>
+                        Skip upload PDF file
+                    </Link>
+                )}
             </div>
             <ToastContainer />
         </div>
     );
 };
 
-export default ChatgptpdfUpload;
+export default UploadPdf;

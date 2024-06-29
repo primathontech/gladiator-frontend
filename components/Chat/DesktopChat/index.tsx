@@ -1,9 +1,11 @@
+/* eslint-disable max-len */
 /* eslint-disable import/no-extraneous-dependencies */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
+
 import cx from 'classnames';
 import ReactMarkdown from 'react-markdown';
 import Image from 'next/image';
-// import Link from 'next/link';
 import Typing from 'react-typing-animation';
 import { toast, ToastContainer } from 'react-toastify';
 
@@ -11,108 +13,80 @@ import { Message, ClickOrPressEvent } from 'types/chat';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { Document } from 'langchain/document';
 
-// import PDFGPT_LOGO from '@public/Images/svgs/Curio.ai.svg';
 import DOCUMENT_UPLOAD from '@public/Images/svgs/document-upload.svg';
-import DOCUMENT_UPLOAD1 from '@public/Images/pngs/document-upload1.png';
 import AI_AVATAR from '@public/Images/pngs/AIAvatar.png';
 import NO_RECORD from '@public/Images/pngs/no-record.png';
 import NO_HISTORY from '@public/Images/pngs/nohistory.png';
-
 import REGENERATE from '@public/Images/svgs/regenerate.svg';
 import SUBMIT_ICON from '@public/Images/svgs/submit.svg';
 import USERICON_IMAGE from '@public/Images/pngs/usericon.png';
-// import BACK_ARROW from '@public/Images/svgs/backarrow.svg';
 import HISTORY from '@public/Images/svgs/timer.svg';
 import LoadingDots from '@components/ui/LoadingDots';
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from '@components/ui/accordion';
+import Delete from '@public/Images/svgs/delete.svg';
+
+import { Accordion, AccordionContent, AccordionItem } from '@components/ui/accordion';
 import ShimmerUiContainer from '@components/ShimmerContainer';
 import UploadPDFModal from '@/components/UploadPDFModal';
-import { APP_URL } from '@/components/appConstant';
+import DeletePdfModal from '@/components/DeletePdfModal';
+import { APP_URL, ApiRoute } from '@/components/appConstant';
 
-import { useRouter } from 'next/router';
 import styles from './styles.module.scss';
 
 const DesktopChat = () => {
     const [query, setQuery] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
-    const [sourceDocs] = useState<Document[]>([]);
-    // const [error, setError] = useState<string | null>(null);
     const [messageState, setMessageState] = useState<{
         messages: Message[];
         pending?: string;
-        history: [string, string][];
+        history?: [string, string][];
         pendingSourceDocs?: Document[];
     }>({
         messages: [
             {
-                // message: "Hi, What would you like to learn?",
                 message:
-                    'Claire.ai ensures 100% accurate data extraction from PDFs, utilizing advanced natural language processing for precise information retrieval and document analysis.',
+                    'Your PDF AI - like ChatGPT but for PDFs. Summarize and answer questions for free.',
                 type: 'apiMessage',
             },
         ],
-        history: [],
         pendingSourceDocs: [],
     });
     const router = useRouter();
     const type = router.route;
+    const selectedCategory = localStorage.getItem('selectedItemTitle');
+
     let type1;
     if (type === '/chat') {
-        type1 = 'Management';
+        type1 = selectedCategory;
     }
     const [selectedValue, setSelectedValue] = useState(type1);
     const [selectedPdf, setSelectedPdf] = useState('');
-    // const [options, setOptions] = useState<string[]>([]);
     const [pdfOptions, setPdfOptions] = useState([]);
-    // const [selectedCard, setSelectedCard] = useState(null);
     const [selectedPdfCard, setSelectedPdfCard] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
     const [previousUserText, setPreviousUserText] = useState('');
+    const [dropdownVisible, setDropdownVisible] = useState(false);
+    const [, setDropdownIndex] = useState(null);
 
     // Add a state to track whether the response has been received from the API
     const [responseReceived, setResponseReceived] = useState(false);
+    const [pdfLoading, setPdfLoading] = useState(false);
 
     const { messages, pending, history, pendingSourceDocs } = messageState;
 
     const messageListRef = useRef<HTMLDivElement>(null);
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
-    // const handleClickCategory = (index: any, data: any) => {
-    //   setSelectedCard(index);
-    //   setSelectedPdfCard(null);
-    //   setSelectedPdf("");
-    //   setSelectedValue(data);
-    //   setMessageState({
-    //     messages: [
-    //       {
-    //         message: "Hi, What would you like to learn?",
-    //         type: "apiMessage",
-    //       },
-    //     ],
-    //     history: [],
-    //     pendingSourceDocs: [],
-    //     pending: undefined,
-    //   });
-    // };
-
     const handleClickPdf = (index: any, data: any) => {
         setSelectedPdfCard(index);
-        // setSelectedCard(null);
         setSelectedValue('');
         setSelectedPdf(data);
         setMessageState({
             messages: [
                 {
-                    message: 'Hi, What would you like to learn?',
+                    message:
+                        'Join millions of students, researchers and professionals to instantly answer questions and understand research with AI',
                     type: 'apiMessage',
                 },
             ],
-            history: [],
             pendingSourceDocs: [],
             pending: undefined,
         });
@@ -120,7 +94,6 @@ const DesktopChat = () => {
 
     async function handleRegenerateSubmit(e: ClickOrPressEvent) {
         e.preventDefault();
-        // setError(null);
         if (!previousUserText) {
             toast.error('Please input a question');
             setLoading(false);
@@ -153,15 +126,12 @@ const DesktopChat = () => {
                 },
                 body: JSON.stringify({
                     question,
-                    history,
-                    // eslint-disable-next-line max-len
-                    selectedValue: selectedValue || `UUF_${selectedPdf}`, // Send selectedValue if it exists, otherwise send
+                    filename: selectedValue || `${selectedPdf}`,
                 }),
                 signal: ctrl.signal,
                 onmessage: (event) => {
                     if (event.data === '[DONE]') {
                         setMessageState((state) => ({
-                            history: [...state.history, [question, state.pending ?? '']],
                             messages: [
                                 ...state.messages,
                                 {
@@ -204,10 +174,44 @@ const DesktopChat = () => {
         handleRegenerateSubmit(e);
     };
 
-    // handle form submission
+    // Common code for fetch functions extracted fetch function
+
+    // eslint-disable-next-line consistent-return
+    async function fetchOptions(
+        url: string,
+        method: string,
+        body?: any,
+        callback?: (response: any) => void,
+    ) {
+        setLoading(true);
+        try {
+            const res = await fetch(url, {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: body ? JSON.stringify(body) : '',
+            });
+
+            if (res.status === 200) {
+                const response = await res.json();
+                if (callback) callback(response);
+
+                return response;
+                // eslint-disable-next-line no-else-return
+            } else {
+                console.error('Failed to fetch data');
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     async function handleSubmit(e: ClickOrPressEvent) {
         e.preventDefault();
-        // setError(null);
+
         if (!query) {
             toast.error('Please input a question');
             setLoading(false);
@@ -232,63 +236,61 @@ const DesktopChat = () => {
             pending: undefined,
         }));
 
-        setLoading(true);
         setQuery('');
         setMessageState((state) => ({ ...state, pending: '' }));
 
-        const ctrl = new AbortController();
+        const requestBody: any = {
+            question,
+            history,
+            filename: selectedValue || `${selectedPdf}`,
+        };
 
-        try {
-            fetchEventSource(`${APP_URL}/api/chat`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
+        if (type === '/chat') {
+            requestBody.category = 'Categories';
+        }
+
+        const response = await fetchOptions(`${APP_URL}${ApiRoute.CHAT_API}`, 'POST', requestBody);
+
+        if (response) {
+            setMessageState((state) => ({
+                ...state,
+                messages: [
+                    ...state.messages,
+                    {
+                        type: 'apiMessage',
+                        message: response.answer,
+                    },
+                ],
+            }));
+        }
+    }
+
+    useEffect(() => {
+        if (selectedPdf) {
+            fetchOptions(
+                `${APP_URL}${ApiRoute.CHAT_API}`,
+                'POST',
+                {
+                    question: 'Summary',
+                    filename: selectedPdf,
                 },
-                body: JSON.stringify({
-                    question,
-                    history,
-                    // eslint-disable-next-line max-len
-                    selectedValue: selectedValue || `UUF_${selectedPdf}`, // Send selectedValue if it exists, otherwise send
-                }),
-                signal: ctrl.signal,
-                onmessage: (event) => {
-                    if (event.data === '[DONE]') {
+                (response) => {
+                    if (response) {
                         setMessageState((state) => ({
-                            history: [...state.history, [question, state.pending ?? '']],
+                            ...state,
                             messages: [
                                 ...state.messages,
                                 {
                                     type: 'apiMessage',
-                                    message: state.pending ?? '',
-                                    sourceDocs: state.pendingSourceDocs,
+                                    message: response.answer,
                                 },
                             ],
-                            pending: undefined,
-                            pendingSourceDocs: undefined,
                         }));
-                        setLoading(false);
-                        ctrl.abort();
-                    } else {
-                        const data = JSON.parse(event.data);
-                        if (data.sourceDocs) {
-                            setMessageState((state) => ({
-                                ...state,
-                                pendingSourceDocs: data.sourceDocs,
-                            }));
-                        } else {
-                            setMessageState((state) => ({
-                                ...state,
-                                pending: (state.pending ?? '') + data.data,
-                            }));
-                        }
                     }
                 },
-            });
-        } catch (error) {
-            setLoading(false);
-            // setError("An error occurred while fetching the data. Please try again.");
+            );
         }
-    }
+    }, [selectedPdf]);
 
     // prevent empty submissions
     const handleEnter = useCallback(
@@ -322,29 +324,30 @@ const DesktopChat = () => {
         textAreaRef.current?.focus();
     }, []);
 
-    useEffect(() => {
-        const fetchOptions = async () => {
-            setIsLoading(true);
-            try {
-                const res = await fetch(`${APP_URL}/api/namespace`, {
-                    method: 'GET',
-                });
-                if (res.status === 200) {
-                    const options = await res.json();
-                    // setOptions(options.category);
-                    if (type === '/customchat') {
-                        setPdfOptions(options.otherFiles);
-                    }
-                } else {
-                    // Handle error
+    const fetchOptionsPdfList = async () => {
+        setPdfLoading(true);
+        try {
+            const res = await fetch(`${APP_URL}/api/files`, {
+                method: 'GET',
+            });
+            if (res.status === 200) {
+                const options = await res.json();
+                if (type === '/chatwithpdf') {
+                    setPdfOptions(options.files);
                 }
-            } catch (error) {
-                console.error('Error fetching options:', error);
-            } finally {
-                setIsLoading(false);
+            } else {
+                // Handle error
+                console.error('Failed to fetch files');
             }
-        };
-        fetchOptions();
+        } catch (error) {
+            console.error('Error fetching options:', error);
+        } finally {
+            setPdfLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchOptionsPdfList();
     }, []);
 
     // scroll to bottom of chat
@@ -355,6 +358,7 @@ const DesktopChat = () => {
     }, [chatMessages]);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDeletePdfModalOpen, setIsDeletePdfModalOpen] = useState<boolean>(false);
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -364,34 +368,89 @@ const DesktopChat = () => {
         setIsModalOpen(false);
     };
 
+    const openDeleteModal = () => {
+        setIsDeletePdfModalOpen(true);
+    };
+
+    const closeDeleteModal = () => {
+        setIsDeletePdfModalOpen(false);
+    };
+
+    const handleClickOutside = () => {
+        setDropdownVisible(false);
+    };
+
+    useEffect(() => {
+        if (dropdownVisible) {
+            document.addEventListener('mousedown', handleClickOutside);
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    const handleOptionClick = (e: any, idx: any) => {
+        e.stopPropagation();
+        setDropdownVisible(!dropdownVisible);
+        setDropdownIndex(idx);
+    };
+
     return (
         <div className={styles.mainContainer}>
             <div className={styles.leftContainer}>
-                <div className='flex justify-between items-center mb-10'>
-                    {/* <Link
-                        href='/'
-                        className='flex ju gap-2 text-2xl font-bold cursor-pointer pl-[20px]'
+                <div className='flex justify-center items-center mb-4'>
+                    <h1
+                        style={{
+                            fontSize: '24px',
+                            fontWeight: 'bold',
+                            paddingLeft: '20px',
+                            color: 'white',
+                            backgroundColor:
+                                'bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent',
+                        }}
                     >
-                        <Image className={styles.logo} src={PDFGPT_LOGO} alt='logo' />
-                    </Link> */}
-                    <h1 style={{ fontSize: '24px', fontWeight: 'bold', paddingLeft: '20px' }}>
-                        Claire.ai
+                        AI-Gladiator
                     </h1>
+
                     <UploadPDFModal isOpen={isModalOpen} onClose={closeModal} />
+                </div>
+                <div className={styles.chatHeaderContainer}>
+                    {type === '/chatwithpdf' && (
+                        <div>
+                            <button
+                                onClick={openModal}
+                                className={styles.uploadButton}
+                                type='button'
+                            >
+                                <span className='text-[24px] font-extrabold flex justify-center align-center gap-2'>
+                                    +
+                                </span>
+                                Drop PDF here
+                            </button>
+                        </div>
+                    )}
                 </div>
                 <div className={styles.container}>
                     <div className={styles.dropdownStyle}>
                         <div className={styles.dropdownLabelStyle}>
                             <Image
-                                src={type === '/customchat' ? DOCUMENT_UPLOAD1 : HISTORY}
+                                src={type === '/chatwithpdf' ? DOCUMENT_UPLOAD : HISTORY}
                                 alt='docuement-upload'
                                 width={20}
                                 height={20}
                             />
-                            <p>{type === '/customchat' ? 'Recent Upload' : 'History'}</p>
+                            <p>
+                                {type === '/chatwithpdf'
+                                    ? 'Uploaded Pdf List'
+                                    : 'Previous Uploaded Pdf History'}
+                            </p>
                         </div>
+
                         <div className={styles.previousPdfUploadList}>
-                            {isLoading ? (
+                            {pdfLoading ? (
                                 <div className={styles.emptyStateMessage}>
                                     <ShimmerUiContainer
                                         className={styles.shimmerUi}
@@ -409,13 +468,40 @@ const DesktopChat = () => {
                                         onClick={() => handleClickPdf(index, data)}
                                         aria-hidden
                                     >
-                                        {data}
+                                        <p className={styles.cardData}>{data}</p>
+                                        {selectedPdfCard === index && (
+                                            <div
+                                                aria-controls='simple-menu'
+                                                aria-haspopup='true'
+                                                aria-hidden
+                                                onClick={(e) => handleOptionClick(e, index)}
+                                            >
+                                                <div
+                                                    onClick={openDeleteModal}
+                                                    className={styles.dropdownItem}
+                                                    aria-hidden
+                                                >
+                                                    <Image
+                                                        src={Delete}
+                                                        alt='delete'
+                                                        width={16}
+                                                        height={16}
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+                                        <DeletePdfModal
+                                            isDeletePdfModalOpen={isDeletePdfModalOpen}
+                                            onClose={closeDeleteModal}
+                                            pdfName={selectedPdf}
+                                            fetchOptions={fetchOptionsPdfList}
+                                        />
                                     </div>
                                 ))
                             ) : (
                                 <div className={styles.emptyStateMessage}>
                                     <Image
-                                        src={type === '/customchat' ? NO_RECORD : NO_HISTORY}
+                                        src={type === '/chatwithpdf' ? NO_RECORD : NO_HISTORY}
                                         alt='noRecord'
                                     />
                                 </div>
@@ -427,28 +513,6 @@ const DesktopChat = () => {
             <div className={styles.chatContainer}>
                 <ToastContainer />
                 <div className={styles.chatScreenContainer}>
-                    <div className={styles.chatHeaderContainer}>
-                        {/* <Image
-                            src={BACK_ARROW}
-                            alt='backarrow'
-                            width={32}
-                            height={32}
-                            onClick={() => window.location.replace('/')}
-                            style={{ cursor: 'pointer' }}
-                        /> */}
-                        {type === '/customchat' && (
-                            <div>
-                                <button
-                                    onClick={openModal}
-                                    className={styles.uploadButton}
-                                    type='button'
-                                >
-                                    <Image src={DOCUMENT_UPLOAD} alt='document upload' />
-                                    Upload Document
-                                </button>
-                            </div>
-                        )}
-                    </div>
                     <div className={styles.chatScreen}>
                         <div ref={messageListRef} className={styles.messageList}>
                             {chatMessages.map((message, index) => {
@@ -461,6 +525,7 @@ const DesktopChat = () => {
                                         className = styles.apiMessage;
                                         icon = (
                                             <Image
+                                                key={index}
                                                 src={AI_AVATAR}
                                                 alt='Me'
                                                 className={styles.userIcon}
@@ -471,6 +536,7 @@ const DesktopChat = () => {
                                 } else {
                                     icon = (
                                         <Image
+                                            key={index}
                                             src={USERICON_IMAGE}
                                             alt='Me'
                                             className={styles.userIcon}
@@ -510,63 +576,30 @@ const DesktopChat = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            {/* {message.sourceDocs && (
-                        <div
-                          className="p-5"
-                          key={`sourceDocsAccordion-${index}`}
-                        >
-                          <Accordion
-                            type="single"
-                            collapsible
-                            className="flex-col"
-                          >
-                            {message.sourceDocs.map((doc, index) => (
-                              <div key={`messageSourceDocs-${index}`}>
-                                <AccordionItem value={`item-${index}`}>
-                                  <AccordionTrigger>
-                                    <h3>Source {index + 1}</h3>
-                                  </AccordionTrigger>
-                                  <AccordionContent>
-                                    <ReactMarkdown linkTarget="_blank">
-                                      {doc.pageContent}
-                                    </ReactMarkdown>
-                                    <p className="mt-2">
-                                      <b>Source:</b>
-                                      {doc.metadata.source.split("/").pop()}
-                                    </p>
-                                  </AccordionContent>
-                                </AccordionItem>
-                              </div>
-                            ))}
-                          </Accordion>
-                        </div>
-                      )} */}
                                         </>
                                     );
                                 }
 
                                 return null;
                             })}
-                            {sourceDocs.length > 0 && (
-                                <div className='p-5'>
-                                    <Accordion type='single' collapsible className='flex-col'>
-                                        {sourceDocs.map((doc, index) => (
-                                            <div key={`SourceDocs-${index}`}>
-                                                <AccordionItem value={`item-${index}`}>
-                                                    <AccordionTrigger>
-                                                        <h3>Source {index + 1}</h3>
-                                                    </AccordionTrigger>
-                                                    <AccordionContent>
-                                                        <ReactMarkdown linkTarget='_blank'>
-                                                            {doc.pageContent}
-                                                        </ReactMarkdown>
-                                                    </AccordionContent>
-                                                </AccordionItem>
-                                            </div>
-                                        ))}
-                                    </Accordion>
-                                </div>
-                            )}
+                            <div className='p-5'>
+                                {messageState.messages.map((msg, index) => (
+                                    <div
+                                        key={`SourceDocs-${index}`}
+                                        className={`message ${msg.type}`}
+                                    >
+                                        <Accordion type='single' collapsible className='flex-col'>
+                                            <AccordionItem value={msg.message}>
+                                                <AccordionContent>
+                                                    <ReactMarkdown linkTarget='_blank'>
+                                                        {msg.message}
+                                                    </ReactMarkdown>
+                                                </AccordionContent>
+                                            </AccordionItem>
+                                        </Accordion>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                     {!loading && responseReceived && (
@@ -593,7 +626,7 @@ const DesktopChat = () => {
                                         id='userInput'
                                         name='userInput'
                                         placeholder={
-                                            loading ? 'Waiting for response...' : 'Send a Message'
+                                            loading ? 'Waiting for response...' : 'Ask any question'
                                         }
                                         value={query}
                                         onChange={(e) => setQuery(e.target.value)}
@@ -617,7 +650,7 @@ const DesktopChat = () => {
                         </button>
                     </div>
                     <p className={styles.copyright}>
-                        © 2024 Primathon Claire.ai. All Rights Reserved.
+                        © 2024 Team AI-Gladiator. All Rights Reserved.
                     </p>
                 </div>
             </div>
